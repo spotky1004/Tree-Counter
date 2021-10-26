@@ -75,7 +75,7 @@ function getPaletteColor(idx) {
 /**
  * @param {import("./saveload.js").GuildSavedata} guildData 
  */
-function drawCanvas(guildData) {
+function drawCanvas(guildData, authorId) {
   // Init canvas
   const canvas = Canvas.createCanvas(canvasWidth, canvasHeight);
   const ctx = canvas.getContext('2d');
@@ -112,6 +112,7 @@ function drawCanvas(guildData) {
 
   // Draw blocks
   cData = containerDatas.blockBoard;
+  const authorPaletteIdx = guildData.blockPalette.findIndex(e => e === authorId);
   const blockSize = cData.size.width / guildData.boardSize;
   for (let y = 0; y < guildData.boardSize; y++) {
     const posY = cData.position.y + cData.size.height * y / guildData.boardSize;
@@ -120,8 +121,9 @@ function drawCanvas(guildData) {
       const posX = cData.position.x + cData.size.width * x / guildData.boardSize;
       const paletteIdx = guildData.blockAuthors[idx] ?? -1;
       colorCounter[paletteIdx]++;
+      const doHighlight = paletteIdx === authorPaletteIdx && guildData.blockAuthors.length > 1000;
       cUtil.drawRect(ctx, {
-        color: getPaletteColor(paletteIdx),
+        color: doHighlight ? "#fff" : getPaletteColor(paletteIdx),
         position: {x: posX, y: posY},
         size: {width: blockSize, height: blockSize}
       });

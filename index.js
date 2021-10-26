@@ -114,7 +114,7 @@ client.on("messageCreate", async (message) => {
     }
     
     // Update Message
-    const mainImg = new Discord.MessageAttachment(drawCanvas(guildSave).toBuffer(), `main_${guildId}.png`);
+    const mainImg = new Discord.MessageAttachment(drawCanvas(guildSave, userId).toBuffer(), `main_${guildId}.png`);
     let imageLogMsg = await attachLogChannel.send({ files: [mainImg] });
     let imageUrl = imageLogMsg.attachments.first().url;
     await countingMessageData[guildId].message.edit({
