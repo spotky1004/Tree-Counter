@@ -14,7 +14,15 @@ const GUILD_DEFAULT_SAVE = {
   lastCount: {
     userId: null,
     timestemp: null
-  }
+  },
+  countMemberCache: [
+    {
+      name: "SampleMember",
+      color: "#000",
+      id: "id",
+      paletteIdx: -1
+    }
+  ]
 };
 const DEFAULT_SAVE = {
   "USER": USER_DEFAULT_SAVE,

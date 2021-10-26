@@ -83,6 +83,17 @@ client.on("messageCreate", async (message) => {
       userId,
       timestemp: new Date().getTime()
     };
+    guildSave.countMemberCache.unshift({
+      name: message.member.displayName,
+      color: message.member.displayHexColor,
+      id: userId,
+      paletteIdx
+    });
+    guildSave.countMemberCache = guildSave.countMemberCache.slice(0, 5);
+    for (let i = guildSave.countMemberCache.length-1; i >= 1; i--) {
+      let data = guildSave.countMemberCache[i];
+      if (data.id === userId || data.id === "id") guildSave.countMemberCache.splice(i, 1);
+    }
   
     // Save savedata
     save(userId, userSave);
@@ -109,7 +120,6 @@ client.on("messageCreate", async (message) => {
       content: "** **",
       embeds: [
         {
-          description: `Current Count: \`${nextCount}\``,
           image: {
             url: imageUrl,
           },

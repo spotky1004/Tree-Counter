@@ -1,3 +1,6 @@
+import Canvas from "canvas";
+Canvas.registerFont("./src/font/SpaceMono-Regular.ttf", {family: "SpaceMono"});
+
 /**
  * @typedef {object} Coordinate
  * @property {number} x
@@ -15,14 +18,15 @@ export function resetCanvasSetting(ctx) {
 }
 
 /**
- * @typedef {object} bcFillReactOptions
+ * @typedef {object} DrawRectOptions
  * @property {string} color
  * @property {Size} size
  * @property {Coordinate} position
  * @property {number} [alpha]
  */
 /**
- * @param {bcFillReactOptions} options 
+ * @param {Canvas.CanvasRenderingContext2D} ctx
+ * @param {DrawRectOptions} options 
  */
 export function drawRect(ctx, options) {
   resetCanvasSetting(ctx);
@@ -34,4 +38,36 @@ export function drawRect(ctx, options) {
     Math.ceil(options.size.width),
     Math.ceil(options.size.height)
   );
+}
+
+/**
+ * @typedef {object} DrawTextOptions
+ * @property {string} text
+ * @property {string} color
+ * @property {number} fontSize
+ * @property {number} [maxWidth]
+ * @property {Coordinate} position
+ * @property {boolean} bold
+ * @property {number} [alpha]
+ */
+/**
+ * @param {Canvas.CanvasRenderingContext2D} ctx
+ * @param {DrawTextOptions} options 
+ */
+export function drawText(ctx, options) {
+  resetCanvasSetting(ctx);
+
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+
+  ctx.fillStyle = options.color;
+  ctx.globalAlpha = options.alpha ?? 1;
+  ctx.font = `${options.fontSize/1.4}px "SpaceMono"` + (options.bold ? " bold" : "");
+
+  ctx.fillText(
+    options.text,
+    options.position.x,
+    options.position.y,
+    options.maxWidth
+  )
 }
