@@ -83,9 +83,10 @@ client.on("messageCreate", async (message) => {
       userId,
       timestemp: new Date().getTime()
     };
+    const displayHexColor = message.member.displayHexColor;
     guildSave.countMemberCache.unshift({
       name: message.member.displayName,
-      color: message.member.displayHexColor,
+      color: displayHexColor !== "#000000" ? displayHexColor : "#ffffff",
       id: userId,
       paletteIdx
     });

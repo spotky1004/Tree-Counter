@@ -27,8 +27,8 @@ const canvasWidth = canvasHeight*1.5;
  */
 const CONTAINER_SIZES = {
   counter: {width: 1, height: 0.2},
-  blockBoard: {width: 0.75/(canvasWidth/canvasHeight), height: 0.75},
-  userStats: {width: 1-(0.75/(canvasWidth/canvasHeight)), height: 0.75}
+  blockBoard: {width: 0.8/(canvasWidth/canvasHeight), height: 0.8},
+  userStats: {width: 1-(0.8/(canvasWidth/canvasHeight)), height: 0.8}
 };
 
 const computedContainerSizes = {};
@@ -81,7 +81,7 @@ function drawCanvas(guildData) {
   const ctx = canvas.getContext('2d');
   /** @type {ContainerData!} */
   let cData = null; // ContainerData
-  let colorCounter = new Array(guildData.blockAuthors.length).fill(0);
+  let colorCounter = new Array(guildData.blockPalette.length).fill(0);
 
   // Draw Counter
   cData = containerDatas.counter;
@@ -144,8 +144,10 @@ function drawCanvas(guildData) {
     position: cData.position,
     size: cData.size
   });
+  const countLeaderboard = colorCounter.map((e, i) => [e, guildData.blockPalette[i]]).sort((a, b) => b[0] - a[0]).map(e => e[1]);
   for (let i = 0; i < guildData.countMemberCache.length; i++) {
     const data = guildData.countMemberCache[i];
+    const countRanking = countLeaderboard.findIndex(e => e === data.id);
     const paletteIdx = guildData.blockPalette.findIndex(e => e === data.id);
 
     const width = cData.size.width * 0.8;
@@ -163,12 +165,12 @@ function drawCanvas(guildData) {
       position: {x: posX - width/30, y: posY}
     })
 
-    // Nickname
+    // Nickname & Ranking
     cUtil.drawText(ctx, {
-      text: data.name,
+      text: `${data.name} | #${countRanking+1}`,
       color: data.color,
       bold: true,
-      fontSize: height/5,
+      fontSize: height/5*1.3,
       maxWidth: width,
       position: {x: posX, y: posY},
     });
@@ -178,7 +180,7 @@ function drawCanvas(guildData) {
       text: colorCounter[paletteIdx],
       color: "#ddd",
       bold: true,
-      fontSize: height/5*4,
+      fontSize: height/5*3.7,
       maxWidth: width,
       position: {x: posX, y: posY + height/5},
     });
