@@ -90,11 +90,11 @@ client.on("messageCreate", async (message) => {
       id: userId,
       paletteIdx
     });
-    guildSave.countMemberCache = guildSave.countMemberCache.slice(0, 5);
     for (let i = guildSave.countMemberCache.length-1; i >= 1; i--) {
       let data = guildSave.countMemberCache[i];
       if (data.id === userId || data.id === "id") guildSave.countMemberCache.splice(i, 1);
     }
+    guildSave.countMemberCache = guildSave.countMemberCache.slice(0, 5);
   
     // Save savedata
     save(userId, userSave);

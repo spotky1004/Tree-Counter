@@ -1,5 +1,6 @@
 import Canvas from "canvas";
 Canvas.registerFont("./src/font/SpaceMono-Regular.ttf", {family: "SpaceMono"});
+Canvas.registerFont("./src/font/SourceHanSansHWK-VF.ttf", {family: "SourceHanSansHWK-VF"});
 
 /**
  * @typedef {object} Coordinate
@@ -47,7 +48,8 @@ export function drawRect(ctx, options) {
  * @property {number} fontSize
  * @property {number} [maxWidth]
  * @property {Coordinate} position
- * @property {boolean} bold
+ * @property {boolean} [bold]
+ * @property {boolean} [useGlobalFont]
  * @property {number} [alpha]
  */
 /**
@@ -62,7 +64,7 @@ export function drawText(ctx, options) {
 
   ctx.fillStyle = options.color;
   ctx.globalAlpha = options.alpha ?? 1;
-  ctx.font = `${options.fontSize/1.4}px "SpaceMono"` + (options.bold ? " bold" : "");
+  ctx.font = `${options.fontSize/1.4}px "${options.useGlobalFont ? "SourceHanSansHWK-VF" : "SpaceMono"}"` + (options.bold ? " bold" : "");
 
   ctx.fillText(
     options.text,

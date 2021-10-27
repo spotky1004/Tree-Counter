@@ -1,4 +1,5 @@
 import Canvas from 'canvas';
+import { truncateSync } from 'fs';
 import * as cUtil from '../util/canvasUtil.js';
 
 
@@ -175,6 +176,7 @@ function drawCanvas(guildData, authorId) {
       fontSize: height/5*1.3,
       maxWidth: width,
       position: {x: posX, y: posY},
+      useGlobalFont: true,
     });
 
     // Count
