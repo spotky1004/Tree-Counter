@@ -1,6 +1,8 @@
 import Discord from 'discord.js';
-import { load, save } from './src/core/saveload.js';
-import drawCanvas from './src/core/drawCanvas.js';
+import { load, save } from './src/util/saveload.js';
+import drawCanvas from './src/util/drawCanvas.js';
+
+(await import("dotenv")).config();
 
 /**
  * @typedef {object} countingMessageData
@@ -18,8 +20,14 @@ let attachLogChannel = null;
 
 client.on("ready", async () => {
   console.log("[Tree-Counter] bot ready");
+  client.user.setActivity({
+    name: "Type \"treecounter\" to open help"
+  });
   await client.channels.fetch("902044346403155979")
-    .then(ch => attachLogChannel = ch);
+    .then(channel => {
+      attachLogChannel = channel;
+      channel.send("login!");
+    });
 });
 
 client.on("messageCreate", async (message) => {
@@ -34,7 +42,7 @@ client.on("messageCreate", async (message) => {
     if (message.content === "setTreeCountChannel" && message.member.permissions.has("ADMINISTRATOR")) {
       guildSave.countingChannelId = message.channelId;
       await save(message.guildId, guildSave);
-      message.channel.send(`Done!\nNext count: ${guildSave.count}`).catch(err => err);
+      message.channel.send(`Done!\nNext count: ${guildSave.count+1}`).catch(err => err);
       return;
     } else if (message.content === "viewTreeLeaderboard") {
       let leaderboardData = [];
@@ -158,4 +166,4 @@ client.on("messageCreate", async (message) => {
   }
 });
 
-client.login(process.env["TOKEN_TREE_COUNTER"]);
+client.login(process.env["TOKEN_TREE_COUNTER_DEV"]);

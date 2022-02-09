@@ -65,7 +65,6 @@ export async function load(type, id) {
     savedata = {};
   }
   savedata = mergeObject(savedata, DEFAULT_SAVE[type]);
-  console.log(type, id, savedata);
   return savedata;
 }
 

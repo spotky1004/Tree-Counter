@@ -1,6 +1,5 @@
 import Canvas from 'canvas';
-import { truncateSync } from 'fs';
-import * as cUtil from '../util/canvasUtil.js';
+import * as cUtil from './canvasUtil.js';
 
 
 
