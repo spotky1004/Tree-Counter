@@ -1,4 +1,3 @@
 /node_modules
-/saveData
-/bin
-/config.js
+config.js
+db.js

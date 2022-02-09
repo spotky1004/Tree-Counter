@@ -1,6 +1,5 @@
 import Discord from 'discord.js';
 import { load, save } from './src/core/saveload.js';
-import * as config from './config.js';
 import drawCanvas from './src/core/drawCanvas.js';
 
 /**
@@ -18,7 +17,7 @@ const client = new Discord.Client({
 let attachLogChannel = null;
 
 client.on("ready", async () => {
-  console.log("bot ready");
+  console.log("[Tree-Counter] bot ready");
   await client.channels.fetch("902044346403155979")
     .then(ch => attachLogChannel = ch);
 });
@@ -27,18 +26,37 @@ client.on("messageCreate", async (message) => {
   // Load save
   const userId = message.author.id;
   const guildId = message.guildId;
-  const userSave = load("USER", userId);
-  const guildSave = load("GUILD", guildId);
+  const userSave = await load("USER", userId);
+  const guildSave = await load("GUILD", guildId);
   const currentCount = guildSave.count;
 
-  if (
-    message.member && message.member.permissions.has("ADMINISTRATOR") &&
-    message.content === "setTreeCountChannel"
-  ) {
-    guildSave.countingChannelId = message.channelId;
-    save(message.guildId, guildSave);
-    message.channel.send("Done!");
-    return;
+  if (message.member) {
+    if (message.content === "setTreeCountChannel" && message.member.permissions.has("ADMINISTRATOR")) {
+      guildSave.countingChannelId = message.channelId;
+      await save(message.guildId, guildSave);
+      message.channel.send(`Done!\nNext count: ${guildSave.count}`).catch(err => err);
+      return;
+    } else if (message.content === "viewTreeLeaderboard") {
+      let leaderboardData = [];
+      const counts = guildSave.blockAuthors.reduce((a, b) => {a[b]++; return a;}, new Array(guildSave.blockPalette.length).fill(0));
+      for (let i = 0; i < guildSave.blockPalette.length; i++) {
+        const userId = guildSave.blockPalette[i];
+        const userCount = counts[i];
+        leaderboardData.push([userId, userCount]);
+      }
+      leaderboardData.sort((a, b) => b[1]-a[1]);
+      let leaderboardText = leaderboardData.map((data, idx) => `\`${(idx+1).toString().padStart(2, " ")}\` \`${data[1].toString().padStart(6, " ")}\` <@${data[0]}>`).slice(0, 40).join("\n");
+  
+      const leaderBoardEmbed = new Discord.MessageEmbed()
+        .setTitle(`Leaderboard (max. 40, tot. ${leaderboardData.length})`)
+        .setDescription(leaderboardText)
+        .setColor("#ffe817");
+  
+      message.channel.send({
+        embeds: [leaderBoardEmbed]
+      }).catch(err => err);
+      return;
+    }
   }
 
   // System exceptions
@@ -62,12 +80,14 @@ client.on("messageCreate", async (message) => {
   ) {
     await message.author.send(`Next count range is ${currentCount + 1} ~ ${currentCount + userSave.level}`)
       .catch(err => err);
+    message.delete().catch(e => e);
   } else if (
     guildSave.lastCount.userId === userId &&
     guildSave.lastCount.timestemp + 10_000 > new Date().getTime()
   ) {
     await message.author.send(`You can count again in \`${(10_000 + (guildSave.lastCount.timestemp - new Date().getTime()))/1000}sec\` (or after other person counted)`)
       .catch(err => err);
+    message.delete().catch(e => e);
   } else {
     // Change varables
     guildSave.count = nextCount;
@@ -97,8 +117,8 @@ client.on("messageCreate", async (message) => {
     guildSave.countMemberCache = guildSave.countMemberCache.slice(0, 5);
   
     // Save savedata
-    save(userId, userSave);
-    save(guildId, guildSave);
+    await save(userId, userSave);
+    await save(guildId, guildSave);
   
     if (
       typeof countingMessageData[guildId] === "undefined" ||
@@ -129,10 +149,13 @@ client.on("messageCreate", async (message) => {
     })
       .catch(err => err);
     // imageLogMsg.delete();
-  }
 
-  message.delete()
-    .catch(e => e);
+    if (nextCount%100 !== 0) {
+      message.delete().catch(e => e);
+    } else {
+      countingMessageData[guildId].inactive = true;
+    }
+  }
 });
 
-client.login(config.token);
+client.login(process.env["TOKEN_TREE_COUNTER"]);

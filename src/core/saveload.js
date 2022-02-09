@@ -1,4 +1,4 @@
-import fs from "fs";
+import { treeCounter as collection } from "../../db.js";
 
 const USER_DEFAULT_SAVE = {
   totalCount: 0,
@@ -40,8 +40,12 @@ Object.freeze(DEFAULT_SAVE);
  * @param {string} id
  * @param {Savedata} savedata
  */
-export function save(id, savedata) {
-  fs.writeFileSync(`./saveData/${id}.json`, JSON.stringify(savedata), (err) => {if (err) throw err;})
+export async function save(id, savedata) {
+  await collection.updateOne(
+    { _id: id },
+    { $set: { _id: id, savedata: JSON.stringify(savedata) } },
+    { upsert: true }
+  );
 }
 
 /**
@@ -50,18 +54,18 @@ export function save(id, savedata) {
  * @returns {Savedata[T]}
  * @template {keyof typeof Savedata} T
  */
-export function load(type, id) {
-  const SAVEDATA_PATH = `./saveData/${id}.json`;
-  const saveExists = fs.existsSync(SAVEDATA_PATH);
+export async function load(type, id) {
+  const saveExists = await collection.count({ _id: id }, { limit: 1 });
 
   /** @type {Savedata[T]} */
   let savedata;
   if (saveExists) {
-    savedata = JSON.parse(fs.readFileSync(SAVEDATA_PATH));
+    savedata = JSON.parse((await collection.findOne({ _id: id })).savedata);
   } else {
     savedata = {};
   }
   savedata = mergeObject(savedata, DEFAULT_SAVE[type]);
+  console.log(type, id, savedata);
   return savedata;
 }
 
