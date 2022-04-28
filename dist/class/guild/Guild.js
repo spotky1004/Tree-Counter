@@ -81,7 +81,7 @@ export default class Guild {
         this.message = null;
     }
     async count(playerId, playerName, message) {
-        var _a, _b, _c, _d;
+        var _a;
         const playerCache = await this.guildPlayerCaches.getGuildPlayer(playerId, playerName);
         const playerIdx = playerCache.data.playerIdx;
         const cooldownLeft = 10000 + playerCache.lastActive - new Date().getTime();
@@ -91,17 +91,18 @@ export default class Guild {
         this.data.count++;
         this.data.pixels.push(playerIdx);
         const prevLastCountsIdx = this.data.lastCounts.findIndex(lastCount => lastCount.playerIdx === playerIdx);
+        const color = (_a = message.member) === null || _a === void 0 ? void 0 : _a.displayHexColor;
         if (prevLastCountsIdx === -1) {
             this.data.lastCounts.unshift({
                 playerIdx,
-                color: (_b = (_a = message.member) === null || _a === void 0 ? void 0 : _a.displayHexColor) !== null && _b !== void 0 ? _b : "#ffffff",
+                color: color && color !== "#000000" ? color : "#ffffff",
                 timestamp: new Date().getTime()
             });
             this.data.lastCounts.splice(5);
         }
         else {
             const data = this.data.lastCounts.splice(prevLastCountsIdx, 1)[0];
-            data.color = (_d = (_c = message.member) === null || _c === void 0 ? void 0 : _c.displayHexColor) !== null && _d !== void 0 ? _d : "#ffffff";
+            data.color = color && color !== "#000000" ? color : "#ffffff";
             this.data.lastCounts.unshift(data);
         }
         this.countMessages.unshift({

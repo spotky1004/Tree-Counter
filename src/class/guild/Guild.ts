@@ -135,16 +135,17 @@ export default class Guild {
     this.data.count++;
     this.data.pixels.push(playerIdx);
     const prevLastCountsIdx = this.data.lastCounts.findIndex(lastCount => lastCount.playerIdx === playerIdx);
+    const color = message.member?.displayHexColor;
     if (prevLastCountsIdx === -1) {
       this.data.lastCounts.unshift({
         playerIdx,
-        color: message.member?.displayHexColor ?? "#ffffff",
+        color: color && color !== "#000000" ? color : "#ffffff",
         timestamp: new Date().getTime()
       });
       this.data.lastCounts.splice(5);
     } else {
       const data = this.data.lastCounts.splice(prevLastCountsIdx, 1)[0];
-      data.color = message.member?.displayHexColor ?? "#ffffff";
+      data.color = color && color !== "#000000" ? color : "#ffffff";
       this.data.lastCounts.unshift(data);
     }
     this.countMessages.unshift({
