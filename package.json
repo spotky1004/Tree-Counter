@@ -1,20 +1,41 @@
 {
-  "name": "treecounter",
-  "type": "module",
+  "name": "spotkys-discord-bot-template",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Tree counter",
+  "main": "./dist/index.js",
+  "type": "module",
   "scripts": {
-    "start": "npm i && node ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "cross-env NODE_ENV=development node --no-deprecation ./dist/index.js",
+    "start": "npm i && cross-env NODE_ENV=production node --no-deprecation ./dist/index.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spotky1004/Tree-Counter.git"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "author": "spotky1004",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spotky1004/Tree-Counter/issues"
+  },
+  "homepage": "https://github.com/spotky1004/Tree-Counter",
   "dependencies": {
-    "canvas": "^2.8.0",
-    "discord.js": "^13.2.0",
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
+    "canvas": "^2.9.1",
+    "cross-env": "^7.0.3",
+    "deepcopy": "^2.1.0",
+    "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "fs": "^0.0.1-security",
-    "mongodb": "^4.3.1"
+    "mongodb": "^4.5.0",
+    "path": "^0.12.7",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.3"
   }
 }
