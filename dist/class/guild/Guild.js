@@ -31,7 +31,7 @@ export default class Guild {
             });
             return true;
         }
-        if (channel.type !== "GUILD_TEXT") {
+        if (channel.type !== "GUILD_TEXT" && channel.type !== "GUILD_PUBLIC_THREAD") {
             await interaction.editReply({
                 content: "Channel must be Text channel!"
             });
@@ -55,7 +55,7 @@ export default class Guild {
         this.data.countingChannelId = channel.id;
         this.connectedChannel = channel;
         await this.canvas.update();
-        this.updateMessage();
+        await this.updateMessage();
     }
     async updateMessage() {
         if (!this.connectedChannel)
