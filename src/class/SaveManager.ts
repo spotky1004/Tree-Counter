@@ -64,7 +64,7 @@ class SaveManager {
       name: "",
       contributeCount: 0,
       playerIdx: -1,
-      lastCount: 0,
+      lastCountStemp: 0,
     };
     return await this.getDocumnet(getGuildPlayerDocumentId(id), defaultData);
   }

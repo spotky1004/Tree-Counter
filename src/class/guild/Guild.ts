@@ -115,20 +115,32 @@ export default class Guild {
     return true;
   }
 
-  get nextCount() {
-    return this.data.count + 1;
-  }
-
   disconnectMessage() {
     this.message = null;
   }
 
+  get nextCount() {
+    return this.data.count + 1;
+  }
+
+  get countCooldown() {
+    return 10_000;
+  }
+
+  /**
+   * Return value is cooldown left
+   */
   async count(playerId: string, playerName: string, message: Discord.Message) {
     const playerCache = await this.guildPlayerCaches.getGuildPlayer(playerId, playerName);
     const playerIdx = playerCache.data.playerIdx;
 
-    const cooldownLeft = 10_000 + playerCache.lastActive - new Date().getTime();
-    if (cooldownLeft > 0) {
+    const lastCount = this.data.lastCounts[0];
+    const cooldownLeft = this.countCooldown + playerCache.lastActive - new Date().getTime();
+    if (
+      lastCount &&
+      lastCount.playerIdx === playerIdx &&
+      cooldownLeft > 0
+    ) {
       return cooldownLeft;
     }
     

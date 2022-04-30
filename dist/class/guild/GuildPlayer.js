@@ -9,7 +9,7 @@ export default class GuildPlayer {
     }
     count() {
         this.data.contributeCount++;
-        this.data.lastCount = new Date().getTime();
+        this.data.lastCountStemp = new Date().getTime();
         this.lastActive = new Date().getTime();
     }
 }
