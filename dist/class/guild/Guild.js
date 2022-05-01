@@ -62,7 +62,6 @@ export default class Guild {
             this.data.countingChannelId = channel.id;
             this.connectedChannel = channel;
             await this.canvas.update();
-            await this.updateMessage();
         }
         catch (e) {
             this.data.countingChannelId = "-1";

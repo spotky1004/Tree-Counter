@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 const commandName = "ranking";
 const slashCommand = new SlashCommandBuilder()
     .setName(commandName)
-    .setDescription("See all privous milestones");
+    .setDescription("See server ranking");
 const commandData = {
     isModCommand: false,
     ephemeral: false,
@@ -10,7 +10,7 @@ const commandData = {
     commandName,
     handler: async ({ guildCache, interaction }) => {
         if (!guildCache.hasFeature("command-ranking")) {
-            await interaction.editReply("Command locked!");
+            await interaction.editReply("This command is locked, count more to unlock this!");
             return true;
         }
         let toSend = ">>> ";

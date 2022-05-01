@@ -1,7 +1,6 @@
 import deepcopy from "deepcopy";
 const getGuildDocumentId = (id) => `g_${id}`;
-// @ts-ignore 
-const getGuildPlayerDocumentId = (id) => `g_${id}_u_${id}`;
+const getGuildPlayerDocumentId = (guildId, id) => `g_${guildId}_u_${id}`;
 class SaveManager {
     constructor(app, collection) {
         this.app = app;
@@ -47,7 +46,7 @@ class SaveManager {
     async saveGuild(id, data) {
         return await this.updateDocument(getGuildDocumentId(id), data);
     }
-    async loadGuildPlayer(id) {
+    async loadGuildPlayer(guildId, id) {
         const defaultData = {
             id,
             name: "",
@@ -56,10 +55,10 @@ class SaveManager {
             lastCountStemp: 0,
             isMod: false,
         };
-        return await this.getDocumnet(getGuildPlayerDocumentId(id), defaultData);
+        return await this.getDocumnet(getGuildPlayerDocumentId(guildId, id), defaultData);
     }
-    async saveGuildPlayer(id, data) {
-        return await this.updateDocument(getGuildPlayerDocumentId(id), data);
+    async saveGuildPlayer(guildId, id, data) {
+        return await this.updateDocument(getGuildPlayerDocumentId(guildId, id), data);
     }
 }
 export default SaveManager;

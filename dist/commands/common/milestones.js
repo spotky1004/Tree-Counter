@@ -11,7 +11,7 @@ const commandData = {
     commandName,
     handler: async ({ guildCache, interaction }) => {
         if (!guildCache.hasFeature("command-milestones")) {
-            await interaction.editReply("Command locked!");
+            await interaction.editReply("This command is locked, count more to unlock this!");
             return true;
         }
         let toSend = "";

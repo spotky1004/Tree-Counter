@@ -18,10 +18,11 @@ export default async function readyHandler(options: ReadyHandlerOptions) {
     const guildId = guild.id;
     const guildCache = await app.guildCaches.getGuild(guildId);
 
-    let commandsToRegister = commonCommands;
+    let commandsToRegister = [...commonCommands];
     if (guildCache.data.isModServer) {
-      commandsToRegister = commandsToRegister.concat(modCommands);
+      commandsToRegister = commandsToRegister.concat(...modCommands);
     }
+
     registerCommands({
       clientId: process.env.CLIENT_ID as string,
       guildId,

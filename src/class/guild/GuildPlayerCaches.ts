@@ -20,7 +20,7 @@ export default class GuildPlayerCaches {
   }
 
   private async fetchGuildPlayer(id: string, name: string | null) {
-    const guildPalyerData = await this.app.saveManager.loadGuildPlayer(id);
+    const guildPalyerData = await this.app.saveManager.loadGuildPlayer(this.guild.data.id, id);
     if (name) {
       guildPalyerData.name = name;
     }
@@ -59,6 +59,6 @@ export default class GuildPlayerCaches {
     if (new Date().getTime() - guildPlayer.lastActive > this.config.cacheLifespan) {
       delete this.cache[id];
     }
-    return await this.app.saveManager.saveGuildPlayer(id, guildPlayer.data);
+    return await this.app.saveManager.saveGuildPlayer(this.guild.data.id, id, guildPlayer.data);
   }
 }

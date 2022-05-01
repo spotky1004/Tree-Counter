@@ -7,8 +7,7 @@ import type { GuildPlayerData } from "./guild/GuildPlayer.js";
 export type Collection = mongodb.Collection<mongodb.Document>;
 
 const getGuildDocumentId = (id: string) => `g_${id}`;
-// @ts-ignore 
-const getGuildPlayerDocumentId = (id: string) => `g_${id}_u_${id}`;
+const getGuildPlayerDocumentId = (guildId: string, id: string) => `g_${guildId}_u_${id}`;
 
 class SaveManager {
   app: App;
@@ -69,7 +68,7 @@ class SaveManager {
     return await this.updateDocument(getGuildDocumentId(id), data);
   }
 
-  async loadGuildPlayer(id: string) {
+  async loadGuildPlayer(guildId: string, id: string) {
     const defaultData: GuildPlayerData = {
       id,
       name: "",
@@ -78,11 +77,11 @@ class SaveManager {
       lastCountStemp: 0,
       isMod: false,
     };
-    return await this.getDocumnet(getGuildPlayerDocumentId(id), defaultData);
+    return await this.getDocumnet(getGuildPlayerDocumentId(guildId, id), defaultData);
   }
 
-  async saveGuildPlayer(id: string, data: GuildPlayerData) {
-    return await this.updateDocument(getGuildPlayerDocumentId(id), data);
+  async saveGuildPlayer(guildId: string, id: string, data: GuildPlayerData) {
+    return await this.updateDocument(getGuildPlayerDocumentId(guildId, id), data);
   }
 }
 

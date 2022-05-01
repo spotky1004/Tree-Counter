@@ -4,7 +4,7 @@ import type { CommandData } from "../../typings/Command.js";
 const commandName = "ranking";
 const slashCommand = new SlashCommandBuilder()
   .setName(commandName)
-  .setDescription("See all privous milestones");
+  .setDescription("See server ranking");
 
 const commandData: CommandData<typeof commandName> = {
   isModCommand: false,
@@ -13,7 +13,7 @@ const commandData: CommandData<typeof commandName> = {
   commandName,
   handler: async ({ guildCache, interaction }) => {
     if (!guildCache.hasFeature("command-ranking")) {
-      await interaction.editReply("Command locked!");
+      await interaction.editReply("This command is locked, count more to unlock this!");
       return true;
     }
     let toSend = ">>> ";

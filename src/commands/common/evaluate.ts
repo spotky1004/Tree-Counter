@@ -21,7 +21,7 @@ const commandData: CommandData<typeof commandName> = {
   commandName,
   handler: async ({ guildCache, interaction }) => {
     if (!guildCache.hasFeature("command-evaluate")) {
-      await interaction.editReply("Command locked!");
+      await interaction.editReply("This command is locked, count more to unlock this!");
       return true;
     }
     const params = getSlashParams(interaction, {

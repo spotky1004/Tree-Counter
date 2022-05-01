@@ -41,6 +41,8 @@ client.on("ready", async () => {
 });
 
 client.on("guildCreate", async (guild) => {
+  console.log(commandJSON.commonCommands);
+  
   try {
     registerCommands({
       clientId: process.env.CLIENT_ID as string,
