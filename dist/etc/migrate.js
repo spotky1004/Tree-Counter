@@ -13,6 +13,14 @@ while (true) {
     for (let i = 0; i < data.blockAuthors.length; i++) {
         playerPixels[data.blockAuthors[i]]++;
     }
+    const ranking = [];
+    for (let i = 0; i < playerPixels.length; i++) {
+        ranking.push({
+            playerIdx: i,
+            count: playerPixels[i]
+        });
+    }
+    ranking.sort((a, b) => b.count - a.count);
     const newGuildData = {
         id: guildId,
         countingChannelId: data.countingChannelId,
@@ -21,7 +29,7 @@ while (true) {
         lastCounts: [],
         playerCount: data.blockPalette.length,
         playerIds: data.blockPalette,
-        ranking: [],
+        ranking: ranking,
         isModServer: false,
     };
     await newCollection.updateOne({ _id: `g_${guildId}` }, { $set: newGuildData }, { upsert: true });

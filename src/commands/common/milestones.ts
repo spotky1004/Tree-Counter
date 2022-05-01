@@ -24,6 +24,7 @@ const commandData: CommandData<typeof commandName> = {
       toSend += `\`${milestone.countGoal.toString().padStart(8, " ")}\` - ${milestone.name}\n`;
     }
     await interaction.editReply(toSend).catch(e => e);
+    guildCache.disconnectMessage();
     return true;
   },
 };

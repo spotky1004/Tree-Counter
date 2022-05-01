@@ -26,6 +26,7 @@ const commandData: CommandData<typeof commandName> = {
       toSend += `\`${(i+1).toString().padStart(1, " ")}.\` \`${rankingData.count.toString().padStart(8, " ")}\` (${name}, ${percent}%)\n`;
     }
     await interaction.editReply(toSend.slice(0, 1900)).catch(e => e);
+    guildCache.disconnectMessage();
     return true;
   },
 };

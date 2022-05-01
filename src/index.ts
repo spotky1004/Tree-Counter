@@ -100,7 +100,8 @@ setInterval(() => {
   app.updateGuildRanking();
   if (client.user) {
     getRandomTrivia;
-    client.user.setActivity(getRandomTrivia({ app, client }), {
+    // getRandomTrivia({ app, client })
+    client.user.setActivity("Big update! Please invite again with the button under. (after kick)", {
       type: "WATCHING"
     });
   }
