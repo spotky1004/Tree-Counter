@@ -8,4 +8,6 @@ await client.connect();
 const db = client.db(dbName);
 const data = db.collection("data");
 const log = db.collection("log");
-export { data, log, };
+const oDb = client.db("Cluster0");
+const oData = oDb.collection("tree-counter");
+export { data, log, oData as oldCollection, };

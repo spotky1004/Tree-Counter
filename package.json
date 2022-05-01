@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "db-migration": "cross-env NODE_ENV=development node --no-deprecation ./dist/etc/migrate.js",
     "start-dev": "cross-env NODE_ENV=development node --no-deprecation ./dist/index.js",
     "start": "npm i && cross-env NODE_ENV=production node --no-deprecation ./dist/index.js"
   },

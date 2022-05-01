@@ -1,5 +1,4 @@
-import { data as newCollection } from "../db.js";
-let oldCollection;
+import { data as newCollection, oldCollection } from "../db.js";
 const oldCollectionCursor = oldCollection.find({});
 while (true) {
     const document = await oldCollectionCursor.next();

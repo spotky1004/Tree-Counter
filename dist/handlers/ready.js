@@ -1,19 +1,18 @@
-import registerCommands from "../registerCommands.js";
+import registerCommands from "../util/registerCommands.js";
 export default async function readyHandler(options) {
-    const { client, token, commonCommands, modCommands, app } = options;
-    const guilds = await client.guilds.fetch();
-    guilds.each(async (guild) => {
-        const guildId = guild.id;
+    const { client, commonCommands, modCommands, app } = options;
+    const oAuthGuilds = await client.guilds.fetch();
+    oAuthGuilds.each(async (oAuthGuild) => {
+        const guildId = oAuthGuild.id;
         const guildCache = await app.guildCaches.getGuild(guildId);
         let commandsToRegister = [...commonCommands];
         if (guildCache.data.isModServer) {
             commandsToRegister = commandsToRegister.concat(...modCommands);
         }
-        registerCommands({
-            clientId: process.env.CLIENT_ID,
+        await registerCommands({
+            client,
             guildId,
             commands: commandsToRegister,
-            token
         });
         if (guildCache.data.countingChannelId !== "-1") {
             try {
