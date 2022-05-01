@@ -3,14 +3,15 @@ import * as commands from "../commands/index.js";
  * Return value is commandName is vaild
  */
 export default async function commandHandler(app, interaction) {
-    var _a;
+    var _a, _b;
     if (!interaction.inGuild() || !interaction.guild || !interaction.channel)
         return false;
+    const guildCache = await app.guildCaches.getGuild(interaction.guildId);
     const commandOptions = {
         app,
         interaction,
-        guildPlayerCache: undefined,
-        guildCache: await app.guildCaches.getGuild(interaction.guildId)
+        guildPlayerCache: await guildCache.guildPlayerCaches.getGuildPlayer(interaction.user.id, interaction.member.hasOwnProperty("displayName") ? interaction.member.displayName : interaction.user.username),
+        guildCache
     };
     let result = false;
     if (isCommonCommandName(interaction.commandName)) {
@@ -18,11 +19,17 @@ export default async function commandHandler(app, interaction) {
         await interaction.deferReply({ ephemeral: (_a = commandToExecute.ephemeral) !== null && _a !== void 0 ? _a : true });
         result = await commandToExecute.handler(commandOptions);
     }
-    else if (isModCommandName(interaction.commandName) &&
-        commandOptions.guildCache.data.isModServer) {
-        // const commandToExecute = commands.modCommands[interaction.commandName];
-        // await interaction.deferReply({ ephemeral: commandToExecute.ephemeral ?? true });
-        // result = await commandToExecute.handler(commandOptions);
+    else if (isModCommandName(interaction.commandName)) {
+        if (commandOptions.guildCache.data.isModServer &&
+            commandOptions.guildPlayerCache.data.isMod) {
+            const commandToExecute = commands.modCommands[interaction.commandName];
+            await interaction.deferReply({ ephemeral: (_b = commandToExecute.ephemeral) !== null && _b !== void 0 ? _b : true });
+            result = await commandToExecute.handler(commandOptions);
+        }
+        else {
+            await interaction.reply("Missing permission!");
+            result = true;
+        }
     }
     else {
         await interaction.reply({

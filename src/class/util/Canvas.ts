@@ -29,6 +29,8 @@ interface FillTextOptions {
   fontSize: number;
   bold?: boolean;
   maxWidth?: number;
+  textAlign?: canvas.CanvasRenderingContext2D["textAlign"];
+  textBaseline?: canvas.CanvasRenderingContext2D["textBaseline"];
 }
 
 export default class Canvas {
@@ -90,8 +92,8 @@ export default class Canvas {
   }
 
   fillText(options: FillTextOptions) {
-    this.ctx.textAlign = 'left';
-    this.ctx.textBaseline = 'top';
+    this.ctx.textAlign = options.textAlign ?? "left";
+    this.ctx.textBaseline = options.textBaseline ?? "top";
     this.ctx.font = `${options.fontSize/1.4}px "${options.font}"` + (options.bold ? " bold" : "");
 
     this.ctx.fillText(

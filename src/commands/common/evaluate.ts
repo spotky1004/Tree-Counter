@@ -12,7 +12,7 @@ const slashCommand = new SlashCommandBuilder()
       .setName("expression")
       .setDescription("expression to evaluate")
       .setRequired(true)
-  )
+  );
 
 const commandData: CommandData<typeof commandName> = {
   isModCommand: false,
@@ -20,11 +20,15 @@ const commandData: CommandData<typeof commandName> = {
   slashCommand,
   commandName,
   handler: async ({ guildCache, interaction }) => {
+    if (!guildCache.hasFeature("command-evaluate")) {
+      await interaction.editReply("Command locked!");
+      return true;
+    }
     const params = getSlashParams(interaction, {
       expression: { type: "string" }
-    })
+    });
     const value = parseExpression(params.expression);
-    await interaction.editReply("= " + value.toString()).catch(e => e);
+    await interaction.editReply(`\`${params.expression}\` => \`${value}\``).catch(e => e);
     guildCache.disconnectMessage();
     return true;
   },

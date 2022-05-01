@@ -61,14 +61,25 @@ client.on("messageCreate", async (message) => {
         connectedChannel !== null &&
         connectedChannel.id === message.channelId
       ) {
-        const result = await handlers.count(message, guildCache);
-        if (result[0]) {
-          await message.delete().catch(e => e);
-        } else {
-          if (!isNaN(result[1])) {
-            message.channel.send(`= ${result[1]}\nNext: \`${guildCache.nextCount}\``);
+        const [countSuccess, countCorrect, countValue] = await handlers.count(message, guildCache);
+        if (countSuccess) {
+          if (countValue%100 !== 0) {
+            await message.delete().catch(e => e);
+          } else {
+            const emoties = ["🎉", "⭐", "👀", "🌠", "🌟", "🏆", "👍", "🌲"];
+            const toReact = emoties[Math.floor(emoties.length * Math.random())];
+            await message.react(toReact).catch(e => e);
+            guildCache.disconnectMessage();
           }
-          guildCache.disconnectMessage();
+        } else {
+          if (!isNaN(countValue)) {
+            if (!countCorrect) {
+              message.channel.send(`=> \`${countValue}\`\nNext: \`${guildCache.nextCount}\``);
+              guildCache.disconnectMessage();
+            } else {
+              await message.delete().catch(e => e);
+            }
+          }
         }
       }
     }
@@ -88,6 +99,7 @@ client.on("interactionCreate", async (interaction) => {
 
 setInterval(() => {
   app.save();
+  app.updateGuildRanking();
   if (client.user) {
     getRandomTrivia;
     client.user.setActivity(getRandomTrivia({ app, client }), {

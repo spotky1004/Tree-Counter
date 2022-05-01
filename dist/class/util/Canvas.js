@@ -45,8 +45,9 @@ export default class Canvas {
         this.ctx.fillRect(Math.ceil(options.x), Math.ceil(options.y), Math.ceil(options.width), Math.ceil(options.height));
     }
     fillText(options) {
-        this.ctx.textAlign = 'left';
-        this.ctx.textBaseline = 'top';
+        var _a, _b;
+        this.ctx.textAlign = (_a = options.textAlign) !== null && _a !== void 0 ? _a : "left";
+        this.ctx.textBaseline = (_b = options.textBaseline) !== null && _b !== void 0 ? _b : "top";
         this.ctx.font = `${options.fontSize / 1.4}px "${options.font}"` + (options.bold ? " bold" : "");
         this.ctx.fillText(options.text, options.position.x, options.position.y, options.maxWidth);
     }

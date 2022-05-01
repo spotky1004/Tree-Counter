@@ -1,5 +1,5 @@
 import deepcopy from "deepcopy";
-import App from "./App.js";
+import App, { AppData } from "./App.js";
 import type mongodb from "mongodb";
 import type { GuildData } from "./guild/Guild.js";
 import type { GuildPlayerData } from "./guild/GuildPlayer.js";
@@ -39,6 +39,17 @@ class SaveManager {
     return result.acknowledged;
   }
 
+  async loadAppData() {
+    const defaultData: AppData = {
+      guildRanking: []
+    };
+    return await this.getDocumnet("app", defaultData);
+  }
+
+  async saveAppData() {
+    return await this.updateDocument("app", this.app.data);
+  }
+
   async loadGuild(id: string) {
     const defaultData: GuildData = {
       id,
@@ -65,6 +76,7 @@ class SaveManager {
       contributeCount: 0,
       playerIdx: -1,
       lastCountStemp: 0,
+      isMod: false,
     };
     return await this.getDocumnet(getGuildPlayerDocumentId(id), defaultData);
   }

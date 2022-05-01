@@ -24,6 +24,14 @@ export default class GuildCaches {
             return await this.fetchGuild(id);
         }
     }
+    getAllCachedGuild() {
+        const guilds = [];
+        for (const id in this.cache) {
+            const guild = this.cache[id];
+            guilds.push(guild);
+        }
+        return guilds;
+    }
     async saveAllGuild() {
         for (const id in this.cache) {
             await this.saveGuild(id);

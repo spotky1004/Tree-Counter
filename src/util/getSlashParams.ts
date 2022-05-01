@@ -26,8 +26,8 @@ interface ParamOptions {
 export default function getSlashParams<T extends {[name: string]: ParamOptions}>(interaction: Discord.CommandInteraction, toGet: T) {
   const options = interaction.options;
 
-  type Params = {[K in keyof T]: T[K]["isRequired"] extends true ? ParamTypes[T[K]["type"]] | null : ParamTypes[T[K]["type"]] };
-  let params: Params = {} as Params;
+  type Params<P extends keyof T> = {[K in P]: T[K]["isRequired"] extends true ? ParamTypes[T[K]["type"]] | null : ParamTypes[T[K]["type"]] };
+  let params: Params<keyof T> = {} as Params<keyof T>;
   for (const name in toGet) {
     if (toGet.hasOwnProperty(name)) {
       const type = toGet[name].type as ParamTypeNames;

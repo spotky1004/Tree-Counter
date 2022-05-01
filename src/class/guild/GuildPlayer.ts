@@ -8,6 +8,7 @@ export interface GuildPlayerData {
   contributeCount: number;
   playerIdx: number;
   lastCountStemp: number;
+  isMod: boolean;
 }
 
 export default class GuildPlayer {

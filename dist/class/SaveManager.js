@@ -21,6 +21,15 @@ class SaveManager {
         const result = await this.collection.updateOne({ _id: id }, { $set: data }, { upsert: true });
         return result.acknowledged;
     }
+    async loadAppData() {
+        const defaultData = {
+            guildRanking: []
+        };
+        return await this.getDocumnet("app", defaultData);
+    }
+    async saveAppData() {
+        return await this.updateDocument("app", this.app.data);
+    }
     async loadGuild(id) {
         const defaultData = {
             id,
@@ -45,6 +54,7 @@ class SaveManager {
             contributeCount: 0,
             playerIdx: -1,
             lastCountStemp: 0,
+            isMod: false,
         };
         return await this.getDocumnet(getGuildPlayerDocumentId(id), defaultData);
     }

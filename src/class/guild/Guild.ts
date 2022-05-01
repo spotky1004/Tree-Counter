@@ -1,6 +1,7 @@
 import GuildPlayerCaches from "./GuildPlayerCaches.js";
 import GuildCanvas from "./GuildCanvas.js";
 import Discord from "discord.js";
+import * as milestones from "../../data/milestones.js";
 import type GuildCaches from "./GuildCaches.js";
 import type App from "../App.js";
 
@@ -30,20 +31,28 @@ export default class Guild {
   connectedChannel: Discord.GuildTextBasedChannel | null;
   private message: Discord.Message | null;
   countMessages: { playerIdx: number, content: string }[];
+  milestoneNr: number;
+  private unlockedFeatures: milestones.UnlockableFeatures[];
   lastActive: number;
 
   constructor(app: App, guildCaches: GuildCaches, data: GuildData) {
     this.app = app;
-    this.canvas = new GuildCanvas(this, {});
+    this.canvas = new GuildCanvas(this);
     this.guildCaches = guildCaches;
     this.guildPlayerCaches = new GuildPlayerCaches(app, this, { cacheLifespan: 30*60_000 });
     this.data = data;
     this.connectedChannel = null;
     this.message = null;
     this.countMessages = [];
+    this.milestoneNr = -1;
+    this.unlockedFeatures = [];
     this.lastActive = new Date().getTime();
+
+    this.data.pixels.splice(this.data.count);
+    this.updateMilestone();
   }
 
+  // Discord
   async connectChannelWithInteraction(interaction: Discord.CommandInteraction) {
     if (!(interaction.inGuild() && interaction.guild && interaction.channel)) return false;
 
@@ -88,21 +97,34 @@ export default class Guild {
   }
 
   async connectChannel(channel: Discord.GuildTextBasedChannel) {
-    this.data.countingChannelId = channel.id;
-    this.connectedChannel = channel;
-
-    await this.canvas.update();
-    await this.updateMessage();
+    try {
+      this.data.countingChannelId = channel.id;
+      this.connectedChannel = channel;
+  
+      await this.canvas.update();
+      await this.updateMessage();
+    } catch (e) {
+      this.data.countingChannelId = "-1";
+      this.connectedChannel = null;
+    }
   }
 
   async updateMessage() {
     if (!this.connectedChannel) return false;
 
-    const attachment = new Discord.MessageAttachment(this.canvas.getImage(), "canvas.png")
-    const messageOptions: Discord.MessageOptions = {
-      content: "** **",
-      files: [attachment]
-    };
+    let messageOptions: Discord.MessageOptions;
+    const image = this.canvas.getImage();
+    if (typeof image !== "undefined") {
+      const attachment = new Discord.MessageAttachment(image, "canvas.png")
+      messageOptions = {
+        content: "** **",
+        files: [attachment]
+      };
+    } else {
+      messageOptions = {
+        content: `\`\`\`css\nWelcome to Tree Counter!\nCurrent Count: [${this.data.count.toString().padStart(8, "0")}]\n\`\`\``
+      };
+    }
     if (
       this.message === null ||
       this.message.deleted
@@ -119,12 +141,17 @@ export default class Guild {
     this.message = null;
   }
 
+  // Count
   get nextCount() {
     return this.data.count + 1;
   }
 
   get countCooldown() {
-    return 10_000;
+    let cooldown = 10_000;
+    if (this.hasFeature("reduce-cooldown-1")) cooldown -= 4_000;
+    if (this.hasFeature("reduce-cooldown-2")) cooldown -= 3_000;
+    if (this.hasFeature("reduce-cooldown-3")) cooldown -= 1_500;
+    return cooldown;
   }
 
   /**
@@ -135,7 +162,7 @@ export default class Guild {
     const playerIdx = playerCache.data.playerIdx;
 
     const lastCount = this.data.lastCounts[0];
-    const cooldownLeft = this.countCooldown + playerCache.lastActive - new Date().getTime();
+    const cooldownLeft = this.countCooldown + playerCache.data.lastCountStemp - new Date().getTime();
     if (
       lastCount &&
       lastCount.playerIdx === playerIdx &&
@@ -144,8 +171,9 @@ export default class Guild {
       return cooldownLeft;
     }
     
+    this.data.pixels[this.data.count] = playerIdx;
     this.data.count++;
-    this.data.pixels.push(playerIdx);
+    this.updateMilestone();
     const prevLastCountsIdx = this.data.lastCounts.findIndex(lastCount => lastCount.playerIdx === playerIdx);
     const color = message.member?.displayHexColor;
     if (prevLastCountsIdx === -1) {
@@ -168,11 +196,14 @@ export default class Guild {
     await this.canvas.update();
 
     playerCache.count();
-    if (!this.data.ranking.find(data => data.playerIdx === playerIdx)) {
+    const rankingIdx = this.data.ranking.findIndex(data => data.playerIdx === playerIdx);
+    if (rankingIdx === -1) {
       this.data.ranking.push({
         count: playerCache.data.contributeCount,
         playerIdx
       });
+    } else {
+      this.data.ranking[rankingIdx].count = playerCache.data.contributeCount;
     }
     this.data.ranking.sort((a, b) => b.count - a.count);
     this.app.logger.addLog("Count", {
@@ -184,5 +215,17 @@ export default class Guild {
     this.lastActive = new Date().getTime();
     this.updateMessage();
     return 0;
+  }
+
+  updateMilestone() {
+    let newMilestoneNr = milestones.getMilestoneNr(this.data.count);
+    if (this.milestoneNr !== newMilestoneNr) {
+      this.milestoneNr = newMilestoneNr;
+      this.unlockedFeatures = milestones.getUnlockedFeatures(newMilestoneNr);
+    }
+  }
+
+  hasFeature(feature: milestones.UnlockableFeatures) {
+    return this.unlockedFeatures.includes(feature);
   }
 }

@@ -15,11 +15,15 @@ const commandData = {
     slashCommand,
     commandName,
     handler: async ({ guildCache, interaction }) => {
+        if (!guildCache.hasFeature("command-evaluate")) {
+            await interaction.editReply("Command locked!");
+            return true;
+        }
         const params = getSlashParams(interaction, {
             expression: { type: "string" }
         });
         const value = parseExpression(params.expression);
-        await interaction.editReply("= " + value.toString()).catch(e => e);
+        await interaction.editReply(`\`${params.expression}\` => \`${value}\``).catch(e => e);
         guildCache.disconnectMessage();
         return true;
     },

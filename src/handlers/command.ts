@@ -11,11 +11,15 @@ export default async function commandHandler(app: App, interaction: Discord.Comm
     !interaction.inGuild() || !interaction.guild || !interaction.channel
   ) return false;
 
+  const guildCache = await app.guildCaches.getGuild(interaction.guildId);
   const commandOptions: CommandHandlerOptions = {
     app,
     interaction,
-    guildPlayerCache: undefined,
-    guildCache: await app.guildCaches.getGuild(interaction.guildId)
+    guildPlayerCache: await guildCache.guildPlayerCaches.getGuildPlayer(
+      interaction.user.id,
+      interaction.member.hasOwnProperty("displayName") ? (interaction.member as Discord.GuildMember).displayName : interaction.user.username
+    ),
+    guildCache
   };
 
   let result = false;
@@ -23,13 +27,18 @@ export default async function commandHandler(app: App, interaction: Discord.Comm
     const commandToExecute = commands.commonCommands[interaction.commandName];
     await interaction.deferReply({ ephemeral: commandToExecute.ephemeral ?? true });
     result = await commandToExecute.handler(commandOptions);
-  } else if (
-    isModCommandName(interaction.commandName) &&
-    commandOptions.guildCache.data.isModServer
-  ) {
-    // const commandToExecute = commands.modCommands[interaction.commandName];
-    // await interaction.deferReply({ ephemeral: commandToExecute.ephemeral ?? true });
-    // result = await commandToExecute.handler(commandOptions);
+  } else if (isModCommandName(interaction.commandName)) {
+    if (
+      commandOptions.guildCache.data.isModServer &&
+      commandOptions.guildPlayerCache.data.isMod
+    ) {
+      const commandToExecute = commands.modCommands[interaction.commandName];
+      await interaction.deferReply({ ephemeral: commandToExecute.ephemeral ?? true });
+      result = await commandToExecute.handler(commandOptions);
+    } else {
+      await interaction.reply("Missing permission!");
+      result = true;
+    }
   } else {
     await interaction.reply({
       content: "Inviald command!",

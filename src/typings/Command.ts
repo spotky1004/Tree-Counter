@@ -5,7 +5,7 @@ import type App from "../class/App.js";
 export interface CommandHandlerOptions {
   app: App;
   interaction: Discord.CommandInteraction;
-  guildPlayerCache: undefined;
+  guildPlayerCache: Awaited<ReturnType<Awaited<ReturnType<App["guildCaches"]["getGuild"]>>["guildPlayerCaches"]["getGuildPlayer"]>>;
   guildCache: Awaited<ReturnType<App["guildCaches"]["getGuild"]>>;
 }
 
