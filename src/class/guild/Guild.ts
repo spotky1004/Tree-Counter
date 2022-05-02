@@ -192,7 +192,6 @@ export default class Guild {
       content: message.content
     });
     this.countMessages.splice(10);
-    await this.canvas.update();
 
     playerCache.count();
     const rankingIdx = this.data.ranking.findIndex(data => data.playerIdx === playerIdx);
@@ -212,6 +211,7 @@ export default class Guild {
     });
 
     this.lastActive = new Date().getTime();
+    await this.canvas.update();
     this.updateMessage();
     return 0;
   }
