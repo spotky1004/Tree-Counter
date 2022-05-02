@@ -10,7 +10,8 @@ export default function parseExpression(str, variables = {}) {
             const [variableName, variableStrExp] = varialbesStrExp[i].replace(/[ \n\t]/g, "").split("=");
             if (!variableNameRegexp.test(variableName))
                 continue;
-            variables[variableName] = parseExpression(variableStrExp, variables);
+            const [result,] = parseExpression(variableStrExp, variables);
+            variables[variableName] = result;
         }
         value = expression.eval(variables);
         type = "expression";

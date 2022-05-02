@@ -12,7 +12,8 @@ export default function parseExpression(str: string, variables: Record<string,an
     for (let i = 0; i < varialbesStrExp.length; i++) {
       const [variableName, variableStrExp] = varialbesStrExp[i].replace(/[ \n\t]/g, "").split("=");
       if (!variableNameRegexp.test(variableName)) continue;
-      variables[variableName] = parseExpression(variableStrExp, variables);
+      const [result, ] = parseExpression(variableStrExp, variables);
+      variables[variableName] = result;
     }
     value = expression.eval(variables);
     type = "expression";
