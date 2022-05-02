@@ -22,19 +22,20 @@ export default async function readyHandler(options: ReadyHandlerOptions) {
       commandsToRegister = commandsToRegister.concat(...modCommands);
     }
 
+    if (guildCache.data.countingChannelId !== "-1") {
+      try {
+        const channel = await client.channels.fetch(guildCache.data.countingChannelId);
+        
+        if (channel !== null && (channel.type === "GUILD_TEXT" || channel.type === "GUILD_PUBLIC_THREAD")) {
+          guildCache.connectChannel(channel);
+        }
+      } catch (e) { }
+    }
+
     await registerCommands({
       client,
       guildId,
       commands: commandsToRegister,
     });
-
-    if (guildCache.data.countingChannelId !== "-1") {
-      try {
-        const channel = await client.channels.fetch(guildCache.data.countingChannelId);
-        if (channel !== null && channel.type === "GUILD_TEXT") {
-          guildCache.connectChannel(channel);
-        }
-      } catch (e) { }
-    }
   });
 }

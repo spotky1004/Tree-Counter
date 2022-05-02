@@ -55,6 +55,10 @@ client.on("messageCreate", async (message) => {
             return;
         if (message.inGuild()) {
             const guildCache = await app.guildCaches.getGuild(message.guild.id);
+            if (guildCache.connectedChannel === null &&
+                guildCache.data.countingChannelId === message.channelId) {
+                guildCache.connectedChannel = message.channel;
+            }
             const connectedChannel = guildCache.connectedChannel;
             if (connectedChannel !== null &&
                 connectedChannel.id === message.channelId) {
