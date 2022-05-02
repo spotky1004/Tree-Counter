@@ -307,7 +307,7 @@ export default class GuildCanvas {
 
     // Texts
     this.canvas.fillText({
-      text: `Milestone #${milestoneNr+1}: ` + nextMilestone.name,
+      text: `Milestone #${milestoneNr+1}: ${nextMilestone.name} (${(progress*100).toFixed(3)}%)`,
       font: "SpaceMono-Regular",
       fontSize: uiData.height / 1.2,
       maxWidth: uiData.width / 3,
@@ -319,7 +319,7 @@ export default class GuildCanvas {
       textAlign: "center"
     });
     this.canvas.fillText({
-      text: `${commaNumber(prevMilestone.countGoal)} ->`,
+      text: `${commaNumber(prevMilestone.countGoal)} <`,
       font: "SpaceMono-Regular",
       fontSize: uiData.height / 1.2,
       maxWidth: uiData.width / 3,
@@ -330,7 +330,7 @@ export default class GuildCanvas {
       textAlign: "left"
     });
     this.canvas.fillText({
-      text: `-> ${commaNumber(nextMilestone.countGoal)}`,
+      text: `< ${commaNumber(nextMilestone.countGoal)}`,
       font: "SpaceMono-Regular",
       fontSize: uiData.height / 1.2,
       maxWidth: uiData.width / 3,
