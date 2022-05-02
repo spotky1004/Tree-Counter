@@ -1,4 +1,4 @@
-import parseExpression from "../util/parseExpression.js";
+import parseExpression, { ExpressionValueType } from "../util/parseExpression.js";
 import discordCooldownFormat from "../util/discordCooldownFormat.js";
 import type Guild from "../class/guild/Guild.js";
 import type Discord from "discord.js";
@@ -8,10 +8,11 @@ import type Discord from "discord.js";
  */
 export default async function countHandler(message: Discord.Message, guildCache: Guild): Promise<[boolean, boolean, number]> {
   let countValue: number;
+  let valueType: ExpressionValueType;
   if (guildCache.hasFeature("expression-count")) {
-    countValue = parseExpression(message.content);
+    [countValue, valueType] = parseExpression(message.content);
   } else {
-    countValue = parseInt(message.content);
+    [countValue, valueType] = [parseInt(message.content), "message"];
   }
 
   const nextCount = guildCache.nextCount;
@@ -27,7 +28,7 @@ export default async function countHandler(message: Discord.Message, guildCache:
 
   let countSuccess = false;
   if (member && countCorrect) {
-    const timeLeft = await guildCache.count(member.id, member.displayName, message);
+    const timeLeft = await guildCache.count(member.id, member.displayName, message, valueType === "expression");
     if (timeLeft > 0) {
       message.author.send(`Cooldown!\n${discordCooldownFormat(new Date().getTime(), timeLeft)}`).catch(e => e);
       countSuccess = false;

@@ -4,6 +4,7 @@ export default function parseExpression(str, variables = {}) {
     const [expressionStrExp, ...varialbesStrExp] = str.split(";");
     const expression = new StringExpression(expressionStrExp);
     let value;
+    let type;
     if (expression.isVaild) {
         for (let i = 0; i < varialbesStrExp.length; i++) {
             const [variableName, variableStrExp] = varialbesStrExp[i].replace(/[ \n\t]/g, "").split("=");
@@ -12,9 +13,11 @@ export default function parseExpression(str, variables = {}) {
             variables[variableName] = parseExpression(variableStrExp, variables);
         }
         value = expression.eval(variables);
+        type = "expression";
     }
     else {
         value = parseInt(str);
+        type = "message";
     }
-    return Number(value);
+    return [Number(value), type];
 }

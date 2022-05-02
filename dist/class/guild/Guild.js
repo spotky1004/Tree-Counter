@@ -114,7 +114,7 @@ export default class Guild {
     /**
      * Return value is cooldown left
      */
-    async count(playerId, playerName, message) {
+    async count(playerId, playerName, message, logMessage) {
         var _a;
         const playerCache = await this.guildPlayerCaches.getGuildPlayer(playerId, playerName);
         const playerIdx = playerCache.data.playerIdx;
@@ -163,7 +163,7 @@ export default class Guild {
         this.data.ranking.sort((a, b) => b.count - a.count);
         this.app.logger.addLog("Count", {
             guildId: this.data.id,
-            text: message.content,
+            text: logMessage ? message.content : (this.data.count - 1).toString(),
             userId: playerId
         });
         this.lastActive = new Date().getTime();
