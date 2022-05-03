@@ -22,7 +22,7 @@ export default class GuildCanvas {
                 bgColor: "#222",
                 size: this.size
             });
-            this.repaint();
+            this._repaint();
         }
         if (this.guild.hasFeature("display-counter"))
             this.updateCounter();
@@ -35,12 +35,15 @@ export default class GuildCanvas {
         if (this.guild.hasFeature("display-count-messages"))
             await this.updateCountMessages();
     }
-    async repaint() {
+    _repaint() {
         this.canvasStage = 0;
         this.size = null;
         this.canvas = null;
         this.uiDatas = null;
         this.prevPixelGridSize = -1;
+    }
+    async repaint() {
+        this._repaint();
         await this.update();
     }
     getImage() {
