@@ -38,6 +38,7 @@ export default class GuildCanvas {
         bgColor: "#222",
         size: this.size
       });
+      this.repaint();
     }
 
     if (this.guild.hasFeature("display-counter")) this.updateCounter();
