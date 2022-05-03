@@ -31,6 +31,7 @@ export default class GuildCanvas {
   async update() {
     const canvasStage = CanvasUIDatas.getCanvasStage(this.guild);
     if (this.canvasStage !== canvasStage) {
+      this._repaint();
       this.canvasStage = canvasStage;
       this.size = CanvasUIDatas.getCanvasSize(canvasStage);
       this.uiDatas = CanvasUIDatas.getUIDatas(this.size, canvasStage);
@@ -38,7 +39,6 @@ export default class GuildCanvas {
         bgColor: "#222",
         size: this.size
       });
-      this._repaint();
     }
 
     if (this.guild.hasFeature("display-counter")) this.updateCounter();
