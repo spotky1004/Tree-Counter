@@ -73,6 +73,7 @@ client.on("messageCreate", async (message) => {
             await message.react(toReact).catch(e => e);
             guildCache.disconnectMessage();
           } else if (Number.isInteger(Math.sqrt(countValue)) && guildCache.hasFeature("display-pixels")) {
+            await message.react("🟩").catch(e => e);
             guildCache.disconnectMessage();
           } else {
             await message.delete().catch(e => e);
