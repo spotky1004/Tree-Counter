@@ -64,14 +64,17 @@ client.on("messageCreate", async (message) => {
                 connectedChannel.id === message.channelId) {
                 const [countSuccess, countCorrect, countValue] = await handlers.count(message, guildCache);
                 if (countSuccess) {
-                    if (countValue % 100 !== 0) {
-                        await message.delete().catch(e => e);
-                    }
-                    else {
+                    if (countValue % 100 === 0) {
                         const emoties = ["🎉", "⭐", "👀", "🌠", "🌟", "🏆", "👍", "🌲"];
                         const toReact = emoties[Math.floor(emoties.length * Math.random())];
                         await message.react(toReact).catch(e => e);
                         guildCache.disconnectMessage();
+                    }
+                    else if (Number.isInteger(Math.sqrt(countValue)) && guildCache.hasFeature("display-pixels")) {
+                        guildCache.disconnectMessage();
+                    }
+                    else {
+                        await message.delete().catch(e => e);
                     }
                 }
                 else {
