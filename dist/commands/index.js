@@ -8,6 +8,7 @@ const commonCommandNameEnum = {
     "milestones": 2,
     "ranking": 3,
     "serverranking": 4,
+    "nextcount": 5,
 };
 const commonCommands = Object.fromEntries(Object.entries(await readModules({
     dirname: path.join(__dirname, "common")
