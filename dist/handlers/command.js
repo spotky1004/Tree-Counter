@@ -16,14 +16,14 @@ export default async function commandHandler(app, interaction) {
     let result = false;
     if (isCommonCommandName(interaction.commandName)) {
         const commandToExecute = commands.commonCommands[interaction.commandName];
-        await interaction.deferReply({ ephemeral: (_a = commandToExecute.ephemeral) !== null && _a !== void 0 ? _a : true });
+        await interaction.deferReply({ ephemeral: (_a = commandToExecute.ephemeral) !== null && _a !== void 0 ? _a : true }).catch(e => e);
         result = await commandToExecute.handler(commandOptions);
     }
     else if (isModCommandName(interaction.commandName)) {
         if (commandOptions.guildCache.data.isModServer &&
             commandOptions.guildPlayerCache.data.isMod) {
             const commandToExecute = commands.modCommands[interaction.commandName];
-            await interaction.deferReply({ ephemeral: (_b = commandToExecute.ephemeral) !== null && _b !== void 0 ? _b : true });
+            await interaction.deferReply({ ephemeral: (_b = commandToExecute.ephemeral) !== null && _b !== void 0 ? _b : true }).catch(e => e);
             result = await commandToExecute.handler(commandOptions);
         }
         else {

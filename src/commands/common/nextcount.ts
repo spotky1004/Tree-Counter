@@ -12,7 +12,7 @@ const commandData: CommandData<typeof commandName> = {
   slashCommand,
   commandName,
   handler: async ({ guildCache, interaction }) => {
-    await interaction.editReply(`Next count is \`${guildCache.nextCount}\``);
+    await interaction.editReply(`Next count is \`${guildCache.nextCount}\``).catch(e => e);
     return true;
   },
 };

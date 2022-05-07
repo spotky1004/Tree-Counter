@@ -25,7 +25,7 @@ export default async function commandHandler(app: App, interaction: Discord.Comm
   let result = false;
   if (isCommonCommandName(interaction.commandName)) {
     const commandToExecute = commands.commonCommands[interaction.commandName];
-    await interaction.deferReply({ ephemeral: commandToExecute.ephemeral ?? true });
+    await interaction.deferReply({ ephemeral: commandToExecute.ephemeral ?? true }).catch(e => e);
     result = await commandToExecute.handler(commandOptions);
   } else if (isModCommandName(interaction.commandName)) {
     if (
@@ -33,7 +33,7 @@ export default async function commandHandler(app: App, interaction: Discord.Comm
       commandOptions.guildPlayerCache.data.isMod
     ) {
       const commandToExecute = commands.modCommands[interaction.commandName];
-      await interaction.deferReply({ ephemeral: commandToExecute.ephemeral ?? true });
+      await interaction.deferReply({ ephemeral: commandToExecute.ephemeral ?? true }).catch(e => e);
       result = await commandToExecute.handler(commandOptions);
     } else {
       await interaction.reply("Missing permission!");
