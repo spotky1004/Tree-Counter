@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import getSlashParams from "../../util/getSlashParams.js";
 import * as CanvasUIDatas from "../../data/canvasUIDatas.js";
+import { getUnlockedFeatures } from "../../data/milestones.js";
 const commandName = "setcount";
 const slashCommand = new SlashCommandBuilder()
     .setName(commandName)
@@ -29,7 +30,7 @@ const commandData = {
             }
         }
         guildCache.updateMilestone();
-        await interaction.editReply(`Done!\nMilestone#: ${guildCache.milestoneNr}\nCanvas Stage: ${CanvasUIDatas.getCanvasStage(guildCache)}\nFeatures`);
+        await interaction.editReply(`Done!\nMilestone#: ${guildCache.milestoneNr}\nCanvas Stage: ${CanvasUIDatas.getCanvasStage(guildCache)}\nFeatures: \`[${getUnlockedFeatures(guildCache.milestoneNr).join(", ")}]\``);
         guildCache.disconnectMessage();
         await guildCache.canvas.repaint();
         await guildCache.updateMessage();

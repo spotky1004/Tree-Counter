@@ -128,7 +128,13 @@ export default class Guild {
       this.message === null ||
       this.message.deleted
     ) {
-      this.message = await this.connectedChannel.send(messageOptions).catch(e => e);
+      let wasSuccess = true;
+      const message = await this.connectedChannel.send(messageOptions).catch(_ => {
+        wasSuccess = false;
+      });
+      if (wasSuccess && message) {
+        this.message = message;
+      }
     } else {
       await this.message.edit(messageOptions).catch(e => e);
     }
