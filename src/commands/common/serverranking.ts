@@ -16,14 +16,19 @@ const commandData: CommandData<typeof commandName> = {
       await interaction.editReply("This command is locked, count more to unlock this!");
       return true;
     }
-    let toSend = ">>> ";
+    let toSend = "```js\n";
+    toSend += " NR |    COUNT |     MEMBER |                   ID |\n";
     const ranking = app.data.guildRanking;
     for (let i = 0; i < Math.min(25, ranking.length); i++) {
       const rankingData = ranking[i];
       if (rankingData.count < 10000) continue;
       const name = rankingData.id === guildCache.data.id ? "here" : `${rankingData.id}`;
-      toSend += `\`${(i+1).toString().padStart(1, " ")}.\` \`${rankingData.count.toString().padStart(8, " ")}\` (${name})\n`;
+      toSend += (i+1).toString().padStart(3, " ") + " | ";
+      toSend += (rankingData.count+"").padStart(8, "0") + " | ";
+      toSend += (rankingData.playerCount+"").padStart(10, " ") + " | ";
+      toSend += name.padStart(20, " ") + " |\n";
     }
+    toSend += "```";
     await interaction.editReply(toSend.slice(0, 1900)).catch(e => e);
     guildCache.disconnectMessage();
     return true;

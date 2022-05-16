@@ -22,11 +22,13 @@ export default class App {
             if (rankingIdx === -1) {
                 this.data.guildRanking.push({
                     id: guild.data.id,
-                    count: guild.data.count
+                    count: guild.data.count,
+                    playerCount: guild.data.playerCount
                 });
             }
             else {
                 this.data.guildRanking[rankingIdx].count = guild.data.count;
+                this.data.guildRanking[rankingIdx].playerCount = guild.data.playerCount;
             }
         }
         this.data.guildRanking.sort((a, b) => b.count - a.count);
