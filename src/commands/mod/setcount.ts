@@ -7,7 +7,7 @@ import type { CommandData } from "../../typings/Command.js";
 const commandName = "setcount";
 const slashCommand = new SlashCommandBuilder()
   .setName(commandName)
-  .setDescription("set count")
+  .setDescription("[MOD COMMAND] set count")
   .addIntegerOption(option =>
     option
       .setName("count")

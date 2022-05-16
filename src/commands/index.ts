@@ -19,6 +19,7 @@ const commonCommands: { [K in keyof typeof commonCommandNameEnum]: CommandData<K
 
 const modCommandNameEnum = {
   "setcount": 0,
+  "syncuserstatus": 1,
 };
 const modCommands: { [K in keyof typeof modCommandNameEnum]: CommandData<K> } = Object.fromEntries(Object.entries(await readModules({
   dirname: path.join(__dirname, "mod")

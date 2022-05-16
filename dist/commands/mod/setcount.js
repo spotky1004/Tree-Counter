@@ -5,7 +5,7 @@ import { getUnlockedFeatures } from "../../data/milestones.js";
 const commandName = "setcount";
 const slashCommand = new SlashCommandBuilder()
     .setName(commandName)
-    .setDescription("set count")
+    .setDescription("[MOD COMMAND] set count")
     .addIntegerOption(option => option
     .setName("count")
     .setDescription("count to set")

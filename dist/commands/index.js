@@ -15,6 +15,7 @@ const commonCommands = Object.fromEntries(Object.entries(await readModules({
 })).map(([key, mod]) => [key, mod.default]));
 const modCommandNameEnum = {
     "setcount": 0,
+    "syncuserstatus": 1,
 };
 const modCommands = Object.fromEntries(Object.entries(await readModules({
     dirname: path.join(__dirname, "mod")
