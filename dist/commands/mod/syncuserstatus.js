@@ -17,8 +17,15 @@ const commandData = {
         }
         for (const playerId of playerIds) {
             const guildPlayer = await guildCache.guildPlayerCaches.getGuildPlayer(playerId, null);
-            guildPlayer.data.contributeCount = playerCounts[guildPlayer.data.playerIdx];
+            const playerIdx = guildPlayer.data.playerIdx;
+            const count = playerCounts[playerIdx];
+            guildPlayer.data.contributeCount = count;
+            const rankingData = guildCache.data.ranking.find(data => data.playerIdx === playerIdx);
+            if (rankingData) {
+                rankingData.count = count;
+            }
         }
+        guildCache.data.ranking.sort((a, b) => b.count - a.count);
         await interaction.editReply(`Done!\n\`${pixels.length}\` pixels\n\`${playerIds.length}\` players`);
         await guildCache.canvas.repaint();
         await guildCache.updateMessage();
