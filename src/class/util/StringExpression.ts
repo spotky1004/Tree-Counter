@@ -213,6 +213,12 @@ export default class StringExpression {
     "randsign": () => Math.floor(Math.random()*2)*2-1,
 
     "not": ([a]) => +(!a),
+    "and": ([a, b]) => a&b,
+    "nand": ([a, b]) => +!(a&b),
+    "or": ([a, b]) => a|b,
+    "nor": ([a, b]) => +!(a|b),
+    "xor": ([a, b]) => a^b,
+    "xnor": ([a, b]) => +!(a ^ b),
 
     "gt": ([a, b]) => +(a > b),
     "gte": ([a, b]) => +(a >= b),
