@@ -28,7 +28,7 @@ const commandData: CommandData<typeof commandName> = {
       expression: { type: "string" }
     });
     const value = parseExpression(params.expression);
-    await interaction.editReply(`\`${params.expression}\` => \`${value}\``).catch(e => e);
+    await interaction.editReply(`\`${params.expression}\` => \`${value[0]}\``).catch(e => e);
     guildCache.disconnectMessage();
     return true;
   },
