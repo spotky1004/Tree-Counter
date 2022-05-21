@@ -11,6 +11,7 @@ export default class GuildCanvas {
         this.canvas = null;
         this.uiDatas = null;
         this.prevPixelGridSize = -1;
+        this.newPixelGridSize = -1;
     }
     async update() {
         const canvasStage = CanvasUIDatas.getCanvasStage(this.guild);
@@ -24,6 +25,7 @@ export default class GuildCanvas {
                 size: this.size
             });
         }
+        this.newPixelGridSize = Math.ceil(Math.sqrt(Math.max(1, this.guild.data.count)));
         if (this.guild.hasFeature("display-counter"))
             this.updateCounter();
         if (this.guild.hasFeature("display-pixels"))
@@ -34,6 +36,7 @@ export default class GuildCanvas {
             this.updateMilestone();
         if (this.guild.hasFeature("display-count-messages"))
             await this.updateCountMessages();
+        this.prevPixelGridSize = this.newPixelGridSize;
     }
     _repaint() {
         this.canvasStage = 0;
@@ -89,10 +92,10 @@ export default class GuildCanvas {
         }
         // PixelStatus
         if (this.prevPixelGridSize !== -1 && this.guild.hasFeature("pixels-status")) {
-            const pixelGridSize = this.prevPixelGridSize;
-            const pixelDiff = (pixelGridSize + 1) ** 2 - pixelGridSize ** 2;
-            const pixelLeftToNextSize = (pixelGridSize + 1) ** 2 - this.guild.data.count;
-            const progress = 1 - (pixelLeftToNextSize - pixelDiff) / pixelDiff;
+            const pixelGridSize = this.newPixelGridSize;
+            const pixelReq = pixelGridSize ** 2 - (pixelGridSize - 1) ** 2;
+            const pixelLeftToNextSize = pixelGridSize ** 2 - this.guild.data.count;
+            const progress = 1 - pixelLeftToNextSize / pixelReq;
             const color = getColorByNumber(this.guild.data.pixels.slice(-1)[0]);
             this.canvas.fillStyle = color;
             this.canvas.alpha = 0.5;
@@ -116,7 +119,7 @@ export default class GuildCanvas {
                 },
                 font: "SpaceMono-Regular",
                 fontSize: uiData.height / 7,
-                text: `${pixelGridSize}² (${pixelLeftToNextSize - pixelDiff}/${pixelDiff})`,
+                text: `${pixelGridSize}² (${pixelReq - pixelLeftToNextSize}/${pixelReq})`,
                 maxWidth: uiData.width / 3,
                 textAlign: "center",
                 textBaseline: "bottom"
@@ -126,7 +129,7 @@ export default class GuildCanvas {
     fillPixel(idx, pixelSize, color, pixelsUIData, isSeparatorPixel = false) {
         if (this.canvas === null)
             return;
-        const pixelGridSize = this.prevPixelGridSize;
+        const pixelGridSize = this.newPixelGridSize;
         const x = idx % pixelGridSize;
         const y = Math.floor(idx / pixelGridSize);
         this.canvas.fillStyle = color;
@@ -147,13 +150,12 @@ export default class GuildCanvas {
         if (uiData === null)
             return;
         const count = this.guild.data.count;
-        const pixelGridSize = Math.ceil(Math.sqrt(Math.max(1, count)));
+        const pixelGridSize = this.newPixelGridSize;
         this.canvas.initCanvasAttributes();
         const pixels = this.guild.data.pixels;
         const pixelSize = Math.min(uiData.width, uiData.height) / pixelGridSize;
         if (pixelGridSize !== this.prevPixelGridSize) {
             // Repaint pixels
-            this.prevPixelGridSize = pixelGridSize;
             this.clearUIDataRange(uiData);
             for (let y = 0; y < pixelGridSize; y++) {
                 for (let x = 0; x < pixelGridSize; x++) {

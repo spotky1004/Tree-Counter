@@ -22,7 +22,11 @@ export default class GuildPlayerCaches {
     }
     async getGuildPlayer(id, name) {
         if (this.cache.hasOwnProperty(id)) {
-            return this.cache[id];
+            const guildPlayer = this.cache[id];
+            if (name) {
+                guildPlayer.data.name = name;
+            }
+            return guildPlayer;
         }
         else {
             return await this.fetchGuildPlayer(id, name);

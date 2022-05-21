@@ -17,12 +17,14 @@ const commandData = {
         toSend += " NR |    COUNT |     MEMBER |                   ID |\n";
         const ranking = app.data.guildRanking;
         for (let i = 0; i < Math.min(25, ranking.length); i++) {
+            if (toSend.length > 1900)
+                continue;
             const rankingData = ranking[i];
             if (rankingData.count < 10000)
                 continue;
             const name = rankingData.id === guildCache.data.id ? "here" : `${rankingData.id}`;
             toSend += (i + 1).toString().padStart(3, " ") + " | ";
-            toSend += (rankingData.count + "").padStart(8, "0") + " | ";
+            toSend += (rankingData.count + "").padStart(8, " ") + " | ";
             toSend += (rankingData.playerCount + "").padStart(10, " ") + " | ";
             toSend += name.padStart(20, " ") + " |\n";
         }

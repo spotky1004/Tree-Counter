@@ -10,7 +10,7 @@ export default async function commandHandler(app, interaction) {
     const commandOptions = {
         app,
         interaction,
-        guildPlayerCache: await guildCache.guildPlayerCaches.getGuildPlayer(interaction.user.id, interaction.member.hasOwnProperty("displayName") ? interaction.member.displayName : interaction.user.username),
+        guildPlayerCache: await guildCache.guildPlayerCaches.getGuildPlayer(interaction.user.id, null),
         guildCache
     };
     let result = false;

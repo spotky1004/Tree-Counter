@@ -17,7 +17,7 @@ export default async function commandHandler(app: App, interaction: Discord.Comm
     interaction,
     guildPlayerCache: await guildCache.guildPlayerCaches.getGuildPlayer(
       interaction.user.id,
-      interaction.member.hasOwnProperty("displayName") ? (interaction.member as Discord.GuildMember).displayName : interaction.user.username
+      null
     ),
     guildCache
   };
