@@ -3,7 +3,7 @@ env();
 import Discord from "discord.js";
 import App from "./class/App.js";
 import { commandJSON } from "./commands/index.js";
-import registerCommands from "./util/registerCommands.js";
+import registerCommands from "./util/command/registerCommands.js";
 import { data as dataCollection, log as logCollection } from "./db.js";
 import * as handlers from "./handlers/index.js";
 import getRandomTrivia from "./util/getRandomTrivia.js";
@@ -42,7 +42,8 @@ client.on("ready", async () => {
 client.on("guildCreate", async (guild) => {
   try {
     registerCommands({
-      client,
+      token: TOKEN,
+      clientId: process.env.CLIENT_ID as string,
       guildId: guild.id,
       commands: commandJSON.commonCommands
     });
