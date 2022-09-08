@@ -37,6 +37,7 @@ const commandData: CommandData<typeof commandName> = {
     }
 
     guildCache.updateMilestone();
+    console.log(`Done!\nMilestone#: ${guildCache.milestoneNr}\nCanvas Stage: ${CanvasUIDatas.getCanvasStage(guildCache)}\nFeatures: \`[${getUnlockedFeatures(guildCache.milestoneNr).join(", ")}]\``);
     await interaction.editReply(`Done!\nMilestone#: ${guildCache.milestoneNr}\nCanvas Stage: ${CanvasUIDatas.getCanvasStage(guildCache)}\nFeatures: \`[${getUnlockedFeatures(guildCache.milestoneNr).join(", ")}]\``);
     
     guildCache.disconnectMessage();

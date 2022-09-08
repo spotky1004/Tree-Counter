@@ -30,6 +30,7 @@ const commandData = {
             }
         }
         guildCache.updateMilestone();
+        console.log(`Done!\nMilestone#: ${guildCache.milestoneNr}\nCanvas Stage: ${CanvasUIDatas.getCanvasStage(guildCache)}\nFeatures: \`[${getUnlockedFeatures(guildCache.milestoneNr).join(", ")}]\``);
         await interaction.editReply(`Done!\nMilestone#: ${guildCache.milestoneNr}\nCanvas Stage: ${CanvasUIDatas.getCanvasStage(guildCache)}\nFeatures: \`[${getUnlockedFeatures(guildCache.milestoneNr).join(", ")}]\``);
         guildCache.disconnectMessage();
         await guildCache.canvas.repaint();
