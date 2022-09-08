@@ -1,4 +1,4 @@
-import registerCommands from "../util/registerCommands.js";
+import registerCommands from "../util/command/registerCommands.js";
 export default async function readyHandler(options) {
     const { client, commonCommands, modCommands, app } = options;
     const oAuthGuilds = await client.guilds.fetch();
@@ -19,7 +19,8 @@ export default async function readyHandler(options) {
             catch (e) { }
         }
         await registerCommands({
-            client,
+            token: process.env.TOKEN,
+            clientId: process.env.CLIENT_ID,
             guildId,
             commands: commandsToRegister,
         });

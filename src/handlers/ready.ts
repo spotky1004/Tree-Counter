@@ -1,4 +1,4 @@
-import registerCommands, { RegisterCommandsOptions } from "../util/registerCommands.js";
+import registerCommands, { RegisterCommandsOptions } from "../util/command/registerCommands.js";
 import type Discord from "discord.js";
 import type App from "../class/App";
 
@@ -19,6 +19,7 @@ export default async function readyHandler(options: ReadyHandlerOptions) {
 
     let commandsToRegister = [...commonCommands];
     if (guildCache.data.isModServer) {
+      console.log(guildCache.data);
       commandsToRegister = commandsToRegister.concat(...modCommands);
     }
 
@@ -33,7 +34,8 @@ export default async function readyHandler(options: ReadyHandlerOptions) {
     }
 
     await registerCommands({
-      client,
+      token: process.env.TOKEN as string,
+      clientId: process.env.CLIENT_ID as string,
       guildId,
       commands: commandsToRegister,
     });
