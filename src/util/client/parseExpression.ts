@@ -11,8 +11,7 @@ export default function parseExpression(str: string): [number, ExpressionValueTy
     const newStr = splitedStr.slice(1).concat(["dontDoInjectPls=" + splitedStr[0]]).join(";");
     value = parseStringVariables(newStr, ";").get("dontDoInjectPls");
     type = "expression";
-  } catch (e) {
-    console.log(e);
+  } catch {
     value = parseInt(str);
     type = "message";
   }

@@ -8,8 +8,7 @@ export default function parseExpression(str) {
         value = parseStringVariables(newStr, ";").get("dontDoInjectPls");
         type = "expression";
     }
-    catch (e) {
-        console.log(e);
+    catch (_a) {
         value = parseInt(str);
         type = "message";
     }
