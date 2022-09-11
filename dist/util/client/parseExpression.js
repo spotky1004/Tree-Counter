@@ -3,7 +3,9 @@ export default function parseExpression(str) {
     let value;
     let type;
     try {
-        value = parseStringVariables("ans=" + str, ";").get("ans");
+        let splitedStr = str.split(";");
+        let newStr = splitedStr.slice(1).concat(["dontDoInjectPls=" + splitedStr[splitedStr.length - 1]]).join(";");
+        value = parseStringVariables(newStr, ";").get("dontDoInjectPls");
         type = "expression";
     }
     catch (e) {
