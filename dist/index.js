@@ -7,7 +7,6 @@ import registerCommands from "./util/command/registerCommands.js";
 import { data as dataCollection, log as logCollection } from "./db.js";
 import * as handlers from "./handlers/index.js";
 import getRandomTrivia from "./util/getRandomTrivia.js";
-console.log("asdf");
 const TOKEN = process.env.TOKEN;
 const client = new Discord.Client({
     intents: [
