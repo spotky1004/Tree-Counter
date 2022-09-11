@@ -6,9 +6,8 @@ export default function parseExpression(str: string): [number, ExpressionValueTy
   let value: any;
   let type: ExpressionValueType;
 
-  console.log(str);
   try {
-    value = parseStringVariables(str, ";");
+    value = parseStringVariables("ans=" + str, ";").get("ans");
     type = "expression";
   } catch {
     value = parseInt(str);

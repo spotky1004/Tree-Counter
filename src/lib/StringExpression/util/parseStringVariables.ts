@@ -4,7 +4,6 @@ import Variables from "../Variables.js";
 const variableNameRegexp = /^[A-Za-z][A-Za-z0-9]*$/;
 
 export default function parseStringVariables(str: string, sepctrator: string=";") {
-  console.log(str);
   const variables = new Variables("number", "string", "StringExpression");
   const lines = str.split(sepctrator).filter(line => line !== "");
   for (const line of lines) {
