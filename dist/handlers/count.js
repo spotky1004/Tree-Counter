@@ -1,5 +1,5 @@
-import parseExpression from "../util/parseExpression.js";
 import discordCooldownFormat from "../util/discordCooldownFormat.js";
+import parseExpression from "../util/client/parseExpression.js";
 /**
  * Return value is [countSuccess, countCorrect, countValue]
  */

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import parseExpression from "../../util/parseExpression.js";
 import getSlashParams from "../../util/getSlashParams.js";
+import parseExpression from "../../util/client/parseExpression.js";
 import type { CommandData } from "../../typings/Command.js";
 
 const commandName = "evaluate";

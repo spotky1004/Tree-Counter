@@ -1,5 +1,5 @@
-import parseExpression, { ExpressionValueType } from "../util/parseExpression.js";
 import discordCooldownFormat from "../util/discordCooldownFormat.js";
+import parseExpression, { ExpressionValueType } from "../util/client/parseExpression.js";
 import type Guild from "../class/guild/Guild.js";
 import type Discord from "discord.js";
 
