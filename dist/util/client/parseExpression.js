@@ -6,7 +6,8 @@ export default function parseExpression(str) {
         value = parseStringVariables("ans=" + str, ";").get("ans");
         type = "expression";
     }
-    catch (_a) {
+    catch (e) {
+        console.log(e);
         value = parseInt(str);
         type = "message";
     }

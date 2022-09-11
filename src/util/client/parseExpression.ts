@@ -9,7 +9,8 @@ export default function parseExpression(str: string): [number, ExpressionValueTy
   try {
     value = parseStringVariables("ans=" + str, ";").get("ans");
     type = "expression";
-  } catch {
+  } catch (e) {
+    console.log(e);
     value = parseInt(str);
     type = "message";
   }
