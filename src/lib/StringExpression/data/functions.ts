@@ -1,3 +1,5 @@
+import Decimal from "../../../../lib/Decimal.js";
+import isFunction from "../util/isFunction.js";
 import type StringExpression from "../StringExpression.js";
 import type Variables from "../Variables.js";
 
@@ -61,7 +63,6 @@ addFunc("sum", (...args) => {
 // type changers
 addFunc("number", (v) => Number(v));
 addFunc("string", (v) => String(v));
-addFunc("bigint", (v) => BigInt(v));
 // compare
 addFunc("eq", (a, b) => a === b);
 addFunc("gt", (a, b) => a > b);
@@ -90,7 +91,7 @@ addFunc("map", function (arr: any[], callback: StringExpression) {
   return arr.map((v, i) => callback.eval([v, i], this));
 });
 addFunc("reduce", function (arr: any[], callback: StringExpression, initialValue: any) {
-  return arr.reduce((a, b, i) => callback.eval([a, b, i], this), initialValue)
+  return arr.reduce((a, b, i) => callback.eval([a, b, i], this), initialValue);
 });
 // string
 addFunc("strtoarr", (str) => str.split(""));
@@ -99,3 +100,22 @@ addFunc("tocharcode", (char) => typeof char === "string" ? char.charCodeAt(0) : 
 addFunc("tocharcodes", (str) => typeof str === "string" ? str.split("").map(v => v.charCodeAt(0)) : -1);
 addFunc("fromcharcode", (code) => typeof code === "number" ? String.fromCharCode(code) : "");
 addFunc("fromcharcodes", (codes) => Array.isArray(codes) ? codes.map(v => String.fromCharCode(v)) : "");
+// Decimal.js
+addFunc("D", (x) => new Decimal(x));
+addFunc("Decimal", (x) => new Decimal(x));
+addFunc("Dmethod", (key: keyof typeof Decimal, ...params: any) => {
+  const method = Decimal[key];
+  if (!isFunction(method)) {
+    return method;
+  }
+  // @ts-ignore
+  return Decimal[key](...params);
+});
+addFunc("Dcalc", (a: Decimal, key: keyof Decimal, ...params: any) => {
+  const method = a[key];
+  if (!isFunction(method)) {
+    return method;
+  }
+  // @ts-ignore
+  return a[key](...params);
+});
