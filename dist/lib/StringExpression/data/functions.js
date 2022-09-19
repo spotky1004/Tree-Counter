@@ -69,6 +69,7 @@ addFunc("lte", (a, b) => a <= b);
 addFunc("and", (...v) => v.every(v => v == true));
 addFunc("or", (...v) => !!v.find(v => v == true));
 addFunc("not", (a) => !a);
+addFunc("xor", (a, b) => a ^ b);
 // if
 addFunc("if", (s, a) => s ? a : undefined);
 addFunc("ifelse", (s, a, b) => s ? a : b);
