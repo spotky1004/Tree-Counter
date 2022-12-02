@@ -4,6 +4,9 @@
   "description": "Tree counter",
   "main": "./dist/index.js",
   "type": "module",
+  "engines": {
+    "node": "16.18.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "db-migration": "cross-env NODE_ENV=development node --no-deprecation ./dist/etc/migrate.js",
