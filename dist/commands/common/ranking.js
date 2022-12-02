@@ -22,7 +22,7 @@ const commandData = {
             const guildPlayer = await guildCache.guildPlayerCaches.getGuildPlayerByIdx(rankingData.playerIdx);
             const name = guildPlayer ? guildPlayer.data.name : "-";
             const percent = (rankingData.count / guildCache.data.count * 100).toFixed(2);
-            toSend += `\`${(i + 1).toString().padStart(1, " ")}.\` \`${rankingData.count.toString().padStart(8, " ")}\` (\`${name.replace(/`/g, " ")}\`, ${percent}%)\n`;
+            toSend += `\`${(i + 1).toString().padStart(1, " ")}.\` \`${rankingData.count.toString().padStart(8, " ")}\` (\`${(name !== "" ? name : " ").replace(/`/g, " ")}\`, ${percent}%)\n`;
         }
         await interaction.editReply(toSend.slice(0, 1900)).catch(e => e);
         guildCache.disconnectMessage();
