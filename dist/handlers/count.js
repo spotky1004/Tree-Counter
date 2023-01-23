@@ -18,6 +18,9 @@ export default async function countHandler(message, guildCache) {
         (guildCache.hasFeature("short-count") &&
             nextCount % 100 !== 0 &&
             nextCount.toString().slice(-3) === countValue.toString().slice(-3));
+    if (guildCache.hasFeature("short-count") && nextCount % 100 !== countValue % 100) {
+        countValue = nextCount;
+    }
     let countSuccess = false;
     if (member && countCorrect) {
         const timeLeft = await guildCache.count(member.id, member.displayName, message, valueType === "expression");
