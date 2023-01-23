@@ -17,8 +17,6 @@ export default async function countHandler(message, guildCache) {
     const countCorrect = nextCount === Math.round(countValue) ||
         (guildCache.hasFeature("short-count") &&
             nextCount % 100 !== 0 &&
-            nextCount.toString().slice(-3) === countValue.toString().slice(-3));
-    if (guildCache.hasFeature("short-count") && nextCount % 100 !== countValue % 100) {
         countValue = nextCount;
     }
     let countSuccess = false;
