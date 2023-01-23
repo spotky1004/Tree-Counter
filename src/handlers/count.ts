@@ -25,7 +25,7 @@ export default async function countHandler(message: Discord.Message, guildCache:
       nextCount%100 !== 0 &&
       nextCount.toString().slice(-3) === countValue.toString().slice(-3)
     );
-  if (guildCache.hasFeature("short-count") && Number(nextCount) !== Number(countValue)) {
+  if (guildCache.hasFeature("short-count") && countCorrect && Number(nextCount) !== Number(countValue)) {
     countValue = nextCount;
   }
 
