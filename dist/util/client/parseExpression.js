@@ -6,6 +6,10 @@ export default function parseExpression(str) {
         const splitedStr = str.split(";");
         const newStr = splitedStr.slice(1).concat(["dontDoInjectPls=" + splitedStr[0]]).join(";");
         value = parseStringVariables(newStr, ";").get("dontDoInjectPls");
+        if (typeof value === "undefined" ||
+            value === null) {
+            throw new Error("Value cannot be undefined");
+        }
         type = "expression";
     }
     catch (_a) {
