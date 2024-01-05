@@ -102,7 +102,7 @@ const avaiablDKeys = ["abs", "acos", "acosh", "add", "asin", "asinh", "atan", "a
 addFunc("D", (x) => new Decimal(x));
 addFunc("Decimal", (x) => new Decimal(x));
 addFunc("Dmethod", (key, ...params) => {
-    if (!avaiablDKeys.includes(key)) return throw Error("Invalid method.");
+    if (!avaiablDKeys.includes(key)) throw Error("Invalid method.");
     const method = Decimal[key];
     if (!isFunction(method)) {
         return method;
@@ -111,7 +111,7 @@ addFunc("Dmethod", (key, ...params) => {
     return Decimal[key](...params);
 });
 addFunc("Dcalc", (a, key, ...params) => {
-    if (!avaiablDKeys.includes(key)) return throw Error("Invalid function.");
+    if (!avaiablDKeys.includes(key)) throw Error("Invalid function.");
     const method = a[key];
     if (!isFunction(method)) {
         return method;
