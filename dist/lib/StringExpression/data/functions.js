@@ -81,8 +81,8 @@ addFunc("fifelse", function (s, a, b) {
 });
 // array
 addFunc("arr", (...args) => args);
-addFunc("arrget", (arr, i) => Array.isArray(arr) ? arr[i] : undefined);
-addFunc("arrset", (arr, i, value) => Array.isArray(arr) ? (arr[i] = value) : undefined);
+addFunc("arrget", (arr, i) => Array.isArray(arr) && !isNaN(Number(i)) ? arr[i] : undefined);
+addFunc("arrset", (arr, i, value) => Array.isArray(arr) && !isNaN(Number(i)) ? (arr[i] = value) : undefined);
 addFunc("len", (arr) => arr.length);
 addFunc("map", function (arr, callback) {
     return arr.map((v, i) => callback.eval([v, i], this));
@@ -98,21 +98,21 @@ addFunc("tocharcodes", (str) => typeof str === "string" ? str.split("").map(v =>
 addFunc("fromcharcode", (code) => typeof code === "number" ? String.fromCharCode(code) : "");
 addFunc("fromcharcodes", (codes) => Array.isArray(codes) ? codes.map(v => String.fromCharCode(v)) : "");
 // Decimal.js
-addFunc("D", (x) => new Decimal(x));
-addFunc("Decimal", (x) => new Decimal(x));
-addFunc("Dmethod", (key, ...params) => {
-    const method = Decimal[key];
-    if (!isFunction(method)) {
-        return method;
-    }
-    // @ts-ignore
-    return Decimal[key](...params);
-});
-addFunc("Dcalc", (a, key, ...params) => {
-    const method = a[key];
-    if (!isFunction(method)) {
-        return method;
-    }
-    // @ts-ignore
-    return a[key](...params);
-});
+// addFunc("D", (x) => new Decimal(x));
+// addFunc("Decimal", (x) => new Decimal(x));
+// addFunc("Dmethod", (key, ...params) => {
+//     const method = Decimal[key];
+//     if (!isFunction(method)) {
+//         return method;
+//     }
+//     // @ts-ignore
+//     return Decimal[key](...params);
+// });
+// addFunc("Dcalc", (a, key, ...params) => {
+//     const method = a[key];
+//     if (!isFunction(method)) {
+//         return method;
+//     }
+//     // @ts-ignore
+//     return a[key](...params);
+// });
