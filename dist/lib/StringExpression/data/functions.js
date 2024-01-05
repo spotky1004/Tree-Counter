@@ -98,21 +98,24 @@ addFunc("tocharcodes", (str) => typeof str === "string" ? str.split("").map(v =>
 addFunc("fromcharcode", (code) => typeof code === "number" ? String.fromCharCode(code) : "");
 addFunc("fromcharcodes", (codes) => Array.isArray(codes) ? codes.map(v => String.fromCharCode(v)) : "");
 // Decimal.js
-// addFunc("D", (x) => new Decimal(x));
-// addFunc("Decimal", (x) => new Decimal(x));
-// addFunc("Dmethod", (key, ...params) => {
-//     const method = Decimal[key];
-//     if (!isFunction(method)) {
-//         return method;
-//     }
-//     // @ts-ignore
-//     return Decimal[key](...params);
-// });
-// addFunc("Dcalc", (a, key, ...params) => {
-//     const method = a[key];
-//     if (!isFunction(method)) {
-//         return method;
-//     }
-//     // @ts-ignore
-//     return a[key](...params);
-// });
+const avaiablDKeys = ["abs", "acos", "acosh", "add", "asin", "asinh", "atan", "atanh", "atan2", "cbrt", "ceil", "clamp", "clone", "cos", "cosh", "div", "exp", "floor", "hypot", "isDecimal", "ln", "log", "log2", "log10", "max", "min", "mod", "mul", "noConflict", "pow", "random", "round", "set", "sign", "sin", "sinh", "sqrt", "sub", "sum", "tan", "tanh", "trunc", "precision", "rounding", "minE", "maxE", "toExpNeg", "toExpPos", "modulo", "crypto", " ", "ROUND_UP", "ROUND_DOWN", "ROUND_CEIL", "ROUND_FLOOR", "ROUND_HALF_UP", "ROUND_HALF_DOWN", "ROUND_HALF_EVEN", "ROUND_HALF_CEIL", "ROUND_HALF_FLOOR", "EUCLID", "absoluteValue", "abs", "ceil", "comparedTo", "cmp", "clampedTo", "clamp", "cosine", "cos", "cubeRoot", "cbrt", "decimalPlaces", "dp", "dividedBy", "div", "dividedToIntegerBy", "divToInt", "equals", "eq", "floor", "greaterThan", "gt", "greaterThanOrEqualTo", "gte", "hyperbolicCosine", "cosh", "hyperbolicSine", "sinh", "hyperbolicTangent", "tanh", "inverseCosine", "acos", "inverseHyperbolicCosine", "acosh", "inverseHyperbolicSine", "asinh", "inverseHyperbolicTangent", "atanh", "inverseSine", "asin", "inverseTangent", "atan", "isFinite", "isInteger", "isInt", "isNaN", "isNegative", "isNeg", "isPositive", "isPos", "isZero", "lessThan", "lt", "lessThanOrEqualTo", "lte", "logarithm", "log", "minus", "sub", "modulo", "mod", "naturalExponential", "exp", "naturalLogarithm", "ln", "negated", "neg", "plus", "add", "precision", "sd", "round", "sine", "sin", "squareRoot", "sqrt", "tangent", "tan", "times", "mul", "toBinary", "toDecimalPlaces", "toDP", "toExponential", "toFixed", "toFraction", "toHexadecimal", "toHex", "toJSON", "toNearest", "toNumber", "toOctal", "toPower", "pow", "toPrecision", "toSignificantDigits", "toSD", "toString", "truncated", "trunc", "valueOf", "d", "digits", "e", "exponent", "s", "sign"];
+addFunc("D", (x) => new Decimal(x));
+addFunc("Decimal", (x) => new Decimal(x));
+addFunc("Dmethod", (key, ...params) => {
+    if (!avaiablDKeys.includes(key)) return throw Error("Invalid method.");
+    const method = Decimal[key];
+    if (!isFunction(method)) {
+        return method;
+    }
+    // @ts-ignore
+    return Decimal[key](...params);
+});
+addFunc("Dcalc", (a, key, ...params) => {
+    if (!avaiablDKeys.includes(key)) return throw Error("Invalid function.");
+    const method = a[key];
+    if (!isFunction(method)) {
+        return method;
+    }
+    // @ts-ignore
+    return a[key](...params);
+});
